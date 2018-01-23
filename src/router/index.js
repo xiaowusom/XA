@@ -4,7 +4,6 @@ import HelloWorld from '@/components/HelloWorld'
 import maintain from '@/pages/maintain'
 import inquiry from '@/pages/inquiry'
 import test1 from '@/pages/test1'
-import test2 from '@/pages/test2'
 import cancelReport from '@/pages/cancelReport'
 
 Vue.use(Router)
@@ -30,20 +29,6 @@ export default new Router({
     component: test1,
     meta: {
       title: '测试列表1',
-    }
-  }, {
-    path: '/test1',
-    name: 'test1',
-    component: test1,
-    meta: {
-      title: '测试列表1',
-    }
-  }, {
-    path: '/test2',
-    name: 'test2',
-    component: test2,
-    meta: {
-      title: '测试列表2',
     }
   }, {
     path: '/cancelReport',
