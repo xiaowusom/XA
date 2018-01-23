@@ -1,6 +1,6 @@
 <template>
   <div class="header">
-      <Button type="primary" shape="circle" :long="true" class="btn"><router-link to="/test2">test2</router-link></Button>
+      <Button type="primary" shape="circle" :long="true" class="btn"><router-link to="/maintain">报事报修</router-link></Button>
 
       <a href="tel:18312583532">一键拨打号码</a>
       <a id="send_message" href="sms:10086?body=呵呵这是问号">一键发送短信</a>

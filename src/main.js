@@ -56,7 +56,7 @@ document.setTitle = function(t) {
 
 // 路由截获
 router.beforeEach((to, from, next) => {
-  const list = ['test1', 'test2']    // 将需要切换效果的路由名称组成一个数组,往里添加对应页面路由名称
+  const list = ['test1','maintain', 'inquiry']    // 将需要切换效果的路由名称组成一个数组,往里添加对应页面路由名称
   const toName = to.name    // 即将进入的路由名字
   const fromName = from.name    // 即将离开的路由名字
   const toIndex = list.indexOf(toName)    // 进入下标
