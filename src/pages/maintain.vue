@@ -124,7 +124,7 @@ import topTitle from '@/components/topTitle'
       }
     }
     .userMessage{
-      height:3.2rem;
+      height:3.1rem;
       width:100%;
       padding-top: 0.3rem;
       .user{
@@ -180,7 +180,7 @@ import topTitle from '@/components/topTitle'
       margin: 0.3rem auto;
       
       p{
-        font-size:0.12rem;
+        font-size:0.25rem;
         float: left;
         text-align:left;
       }
