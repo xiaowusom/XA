@@ -1,9 +1,6 @@
 <template>
 	<div class="content">
-		<div class="header">
-			报事详情
-		</div>
-		<div class="grayBox"></div>
+		<topTitle></topTitle>
 		<div class="box">
 			<div class="remark">
 				<span>水管漏水，请尽管处理。</span>
@@ -73,15 +70,14 @@
 					</li>
 				</ul>
 			</div>
-			<div class="back">
-				<div><span>
-					取消订单
-				</span></div>
-			</div>
+			<div class="next_btn" @click="handleSubmit()">
+		      <Button type="primary" shape="circle" :long="true">取消工单</Button>
+		    </div> 
 		</div>
 	</div>
 </template>
 <script>
+import topTitle from '@/components/topTitle'
 	export default {
 		data() {
 			return {
@@ -91,40 +87,36 @@
 		mounted() {
 
 		},
+		components: {
+	      topTitle
+	    },
 		methods: {
-			
+			handleSubmit(){
+		        this.$router.push({ path: '/'});
+		      },
 		}
 	}
 </script>
 <style lang="scss" scoped>
 	.content{
-		width: 7.5rem;
-		height: 13.34rem;
+		width: 100%;
+		height: 100%;
 		overflow: hidden;
-		background:white;
+		background:#EFf2f5;
 		box-sizing: border-box;
-		.header{
-			width: 100%;
-			height: 1.28rem;
-			text-align: center;
-			line-height: 1.28rem;
-			font-size: 0.18rem;
-		}
 		.box{
 			width: 100%;
 			height: 4.25rem;
-			.grayBox{
-				width: 100%;
-				height: 0.15rem;
-				background: #e6e9f3;
-			}
+			margin-top:0.15rem;
+			padding-top: 0.1rem;
+			background:#FFF;
 			.remark{
 				width: 6.9rem;
 				height: 0.71rem;
 				line-height: 0.71rem;
 				border: 0.01rem solid #d2d2d2;
 				margin: 0 auto;
-				margin-top: 0.23rem;
+				//margin-top: 0.23rem;
 				text-align:left;
 				padding-left: 0.15rem;
 			}
@@ -187,9 +179,10 @@
 				background:#eff2f5;
 			}
 			.handel_box{
-				width: 6.9rem;
+				width: 100%;
 				height: 2.11rem;
 				margin:0 auto;
+				background:#FFF;
 				.info_list>li{
 					list-style: none;
 					height: 0.7rem;
@@ -210,21 +203,14 @@
 					}
 				}
 			}
-			.back{
-				width: 100%;
-				height:5.5rem;
-				padding-top: 0.5rem;
-				background: #eff2f5;
-				div{
-					margin:0 auto;
-					width: 6.17rem;
-					height: 0.74rem;
-					line-height: 0.74rem;
-					text-align: center;
-					border-radius: 0.15rem;
-					background:skyblue; 
-				}
-			}
+			.next_btn{
+		      width: 6.62rem;
+		      margin: 0 auto;
+		      margin-top: 1rem;
+		      Button{
+		        height: 0.8rem;
+		      }
+		    }
 		}
 	}
 	

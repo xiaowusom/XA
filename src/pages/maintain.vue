@@ -8,14 +8,17 @@
             <div class="detele" @click="Delete()">
                 <Icon type="ios-close"></Icon>
             </div>
+            <img src="../images/img.png">
         </div>
         <div class="imgBox">
             <div class="detele" @click="Delete()">
                 <Icon type="ios-close"></Icon>
-            </div></div>
-        <div class="imgBox">
- 
+            </div>
+            <img :src="urlAddress">
         </div>
+        <!-- <div class="imgBox"> -->
+          <input class="photograph" id="input" type="file" accept="image/*" placeholder="上传三张图片" @change="getImg($event)"  >
+        <!-- </div> -->
       </div>
       <div class="userMessage">
         <div class="user">
@@ -47,11 +50,13 @@ import topTitle from '@/components/topTitle'
   export default {
     data(){
       return {
-
+          file:null,
+          urlAddress:'../../static/img.png'
       }
     },
     mounted(){
-     
+      
+      this.getIos()
     },
     components: {
       topTitle
@@ -60,8 +65,38 @@ import topTitle from '@/components/topTitle'
       handleSubmit(){
         this.$router.push({ path: '/'});
       },
-      Delete() {
-      
+      getIos() {
+        var _this = this
+          _this.file = document.getElementById('input');
+          var ua=navigator.userAgent.toLowerCase();
+          if (ua.match(/iPhone\sOS/i) == "iphone os") {
+              _this.file.removeAttribute("capture");
+          } else {
+              
+          }
+      },
+      getImg(event) {
+        var _this = this;
+        var file = event.target.files[0];
+          //this.urlAddress = file[0].lastModified
+        //console.log(event.target.files);
+        var reader = new FileReader();
+        reader.readAsDataURL(file); // 读出 base64
+        reader.onloadend = function () {
+            // 图片的 base64 格式, 可以直接当成 img 的 src 属性值        
+            _this.urlAddress = reader.result;
+
+            console.log( _this.urlAddress)
+            // 下面逻辑处理
+        };
+        // if (file.files && file.files[0])
+        //   {
+        //     var reader = new FileReader();
+        //     reader.onload = function(evt){
+        //       console.log(evt.target.result)
+        //     }
+        //     reader.readAsDataURL(file.files[0]);
+        //   }
       },
     }
   }
@@ -78,6 +113,7 @@ import topTitle from '@/components/topTitle'
       background-color: #FFF;
       margin-top: 0.15rem;
       padding: 0.18rem 0.28rem;
+      box-shadow: 0 0.15rem 0 rgba(220,220,220,0.6);
     }
     .text{
       width: 100%;
@@ -94,19 +130,33 @@ import topTitle from '@/components/topTitle'
       width:100%;
       margin-bottom: 0.18rem;
       .imgBox{
+        vertical-align: top;
         position:relative;
         margin-right: 0.37rem; 
         display:inline-block;
         height: 1.05rem;
         width:2rem;
-        border: 0.02rem dashed #D3D3D3;
-        background-image: url(../images/img.png);
-        background-size: 100% 100%;
+        //border: 0.02rem dashed #D3D3D3;
+        // background-image: url(../images/img.png);
+        // background-size: 100% 100%;
+        img{
+          display:inline-block;
+          height: 1.05rem;
+          width:2rem;
+        }
       }
-      .imgBox:nth-of-type(3){
+      .photograph{
         margin: 0;
+        position:relative;
+        display:inline-block;
+        height: 1.05rem;
+        width:2rem;
+        border: 0.02rem dashed #D3D3D3;
         background-image: url(../images/camera.png);
         background-size: 100% 100%;
+        font-size:0;
+        vertical-align: top;
+
       }
       .detele{
         display: inline-block;

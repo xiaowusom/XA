@@ -35,7 +35,7 @@ export default new Router({
     name: 'cancelReport',
     component: cancelReport,
     meta: {
-      title: '取消报事',
+      title: '报事详情',
     }
   }]
 })
