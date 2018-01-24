@@ -2,15 +2,14 @@
 	<div class="content">
 		<topTitle></topTitle>
 		<div class="box">
-			<div class="remark">
-				<span>水管漏水，请尽管处理。</span>
-			</div>
+			<p class="remark">水管漏水，理。</span>
+			</p>
 			<div class="picture_box">
 				<div class="picture_list">
 					<div>图片1</div>
 				</div>
 				<div class="picture_list center_list">
-					<div>图片2</div>
+					<div>图片2123</div>
 				</div>
 				<div class="picture_list">
 					<div>图片3</div>
@@ -112,13 +111,14 @@ import topTitle from '@/components/topTitle'
 			background:#FFF;
 			.remark{
 				width: 6.9rem;
-				height: 0.71rem;
-				line-height: 0.71rem;
+				min-height: 0.71rem;
 				border: 0.01rem solid #d2d2d2;
 				margin: 0 auto;
 				//margin-top: 0.23rem;
 				text-align:left;
 				padding-left: 0.15rem;
+				display: flex;
+				align-items:center;
 			}
 			.picture_box{
 				display: flex;
