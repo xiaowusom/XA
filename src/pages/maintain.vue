@@ -5,6 +5,7 @@
       <textarea class="text"placeholder="请在此处填写报事内容。" id="contentValue"></textarea>
       <div class="imgDiv">
         <div class="imgBox">
+
             <!-- <div class="detele" @click="delete()">
                 <Icon type="ios-close"></Icon>
             </div> -->
@@ -29,7 +30,7 @@
           <span>联系人：</span>
           <input type="text" placeholder="请输入姓名" id="userName">
         </div>
-        <div class="user"> 
+        <div class="user">
           <span>联系方式：</span>
           <input type="text" placeholder="请输入手机号" id="userPhone">
         </div>
@@ -41,11 +42,11 @@
     </div>
     <div class="next_btn" @click="handleSubmit()">
       <Button type="primary" shape="circle" :long="true">提交</Button>
-    </div> 
+    </div>
       <div class="prompt">
-        <p>温馨提示：</p> 
+        <p>温馨提示：</p>
         <p class="textPrompt">点击提交后，工单编号将以短信的形式下发至您的手机，且今后工单进度的更新也会以短信的形式下发至您的手机，请注意查收。</p>
-      </div>     
+      </div>
   </div>
 </template>
 
@@ -95,7 +96,7 @@ import topTitle from '@/components/topTitle'
             //       console.log(res)
             //     })
             })
-        
+
         //this.$router.push({ path: '/'});
       },
       //删除图片
@@ -110,7 +111,7 @@ import topTitle from '@/components/topTitle'
           if (ua.match(/iPhone\sOS/i) == "iphone os") {
               _this.file.removeAttribute("capture");
           } else {
-              
+
           }
       },
       //获取图片或者拍照
@@ -120,7 +121,7 @@ import topTitle from '@/components/topTitle'
         console.log(file);
         var reader = new FileReader();
         reader.readAsDataURL(file); // 读出 base64
-        reader.onloadend = function () {        
+        reader.onloadend = function () {
             _this.imgs.push(reader.result);
             _this.urlAddress1 = _this.imgs[0];
             if(_this.imgs[1]){
@@ -158,7 +159,7 @@ import topTitle from '@/components/topTitle'
       padding: 0.05rem;
       display: inline-block;
       border-radius: 0;
-      margin-bottom:0.18rem; 
+      margin-bottom:0.18rem;
     }
     .imgDiv{
       height: 1.05rem;
@@ -167,7 +168,7 @@ import topTitle from '@/components/topTitle'
       .imgBox{
         vertical-align: top;
         position:relative;
-        margin-right: 0.37rem; 
+        margin-right: 0.37rem;
         display:inline-block;
         height: 1.05rem;
         width:2rem;
@@ -271,7 +272,7 @@ import topTitle from '@/components/topTitle'
       height:1.4rem;
       padding:0.1rem 0.4rem;
       margin: 0.3rem auto;
-      
+
       p{
         font-size:0.25rem;
         float: left;
