@@ -12,7 +12,7 @@
 					<div>图片1</div>
 				</div>
 				<div class="picture_list center_list">
-					<div>图片2</div>
+					<div>图片2123</div>
 				</div>
 				<div class="picture_list">
 					<div>图片3</div>
