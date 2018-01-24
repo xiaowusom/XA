@@ -80,7 +80,7 @@ import topTitle from '@/components/topTitle'
     methods:{
       handleSubmit(){
         var _this = this;
-        //console.log(_this.imgs[0]);
+        
         var url =  JSON.stringify(_this.imgs[0]);
          console.log(_this.url);
         this.$post('/ssh/v1/appBase/filesUpload',{files:url}).then(res => {
