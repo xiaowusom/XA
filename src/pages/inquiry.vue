@@ -2,7 +2,7 @@
   <div class="bigDiv">
    <topTitle></topTitle>
     <div class="input">
-      <input type="text" placeholder="请输入工单编号">
+      <input type="text" placeholder="请输入工单编号" v-model="workCode">
     </div>
     <div class="next_btn" @click="handleSubmit()">
         <Button type="primary" shape="circle" :long="true">确定</Button>
@@ -15,7 +15,7 @@ import topTitle from '@/components/topTitle'
   export default {
     data(){
       return {
-
+        workCode:'',
       }
     },
     mounted(){
@@ -26,7 +26,7 @@ import topTitle from '@/components/topTitle'
     },
     methods:{
       handleSubmit(){
-        this.$router.push({ path: '/'});
+        this.$router.push({path:"/cancelReport", query: {workCode:this.workCode}})
       }
     }
   }

@@ -1,47 +1,42 @@
 <template>
-	<div class="content">
-		<topTitle></topTitle>
-		<div class="box">
-			<p class="remark">水管漏水，理。</span>
-			</p>
-			<div class="picture_box">
-				<div class="picture_list">
-					<div>图片1</div>
+	<div>
+		<div class="content" >
+			<topTitle></topTitle>
+			<div class="box">
+				<p class="remark">{{this.value.remarks}}</span>
+				</p>
+				<div class="picture_box">
+					<div class="picture_list">
+						<div><img :src="picture"></div>
+					</div>
 				</div>
-				<div class="picture_list center_list">
-					<div>图片2123</div>
-				</div>
-				<div class="picture_list">
-					<div>图片3</div>
-				</div>
+				<ul class="info_list">
+					<li>
+						<div class="list_1">
+							<span>联系人:</span>
+						</div>
+						<div class="list_2">
+							<span>{{this.value.peopleName}}</span>
+						</div>
+					</li>
+					<li>
+						<div class="list_1">
+							<span>联系电话:</span>
+						</div>
+						<div class="list_2">
+							<span>{{this.value.reportPhone}}</span>
+						</div>				
+					</li>
+					<li>
+						<div class="list_1">
+							<span>报事地址:</span>
+						</div>
+						<div class="list_2">
+							<span>{{this.value.address}}</span>
+						</div>
+					</li>
+				</ul>	
 			</div>
-			<ul class="info_list">
-				<li>
-					<div class="list_1">
-						<span>联系人:</span>
-					</div>
-					<div class="list_2">
-						<span>徐柳飞</span>
-					</div>
-				</li>
-				<li>
-					<div class="list_1">
-						<span>联系人:</span>
-					</div>
-					<div class="list_2">
-						<span>18612345678</span>
-					</div>				</li>
-				<li>
-					<div class="list_1">
-						<span>报事地址:</span>
-					</div>
-					<div class="list_2">
-						<span>深圳市中海华庭1栋1单元101室</span>
-					</div>
-				</li>
-			</ul>
-			<div class="gray_box"></div>
-			<div class="black_box"></div>
 			<div class="handel_box">
 				<ul class="info_list">
 					<li>
@@ -49,7 +44,7 @@
 							<span>工单编号:</span>
 						</div>
 						<div class="list_2">
-							<span>GJH12345678</span>
+							<span>{{this.value.code}}</span>
 						</div>
 					</li>
 					<li>
@@ -57,14 +52,15 @@
 							<span>工单状态:</span>
 						</div>
 						<div class="list_2">
-							<span>未受理</span>
-						</div>				</li>
+							<span>{{this.value.status == 1?"未受理":"已处理"}}</span>
+						</div>				
+					</li>
 					<li>
 						<div class="list_1">
 							<span>下单时间:</span>
 						</div>
 						<div class="list_2">
-							<span>2018-11-12 09:32:09</span>
+							<span>{{this.value.createTime|formatDate}}</span>
 						</div>
 					</li>
 				</ul>
@@ -77,23 +73,45 @@
 </template>
 <script>
 import topTitle from '@/components/topTitle'
+import { formatDate } from '@/script/date.js'
 	export default {
 		data() {
 			return {
-
+				code:this.$route.query.workCode,
+				value:'',
+				picture:[],
 			}
 		},
 		mounted() {
-
+			this.getData();
 		},
 		components: {
 	      topTitle
 	    },
 		methods: {
-			handleSubmit(){
-		        this.$router.push({ path: '/'});
+			getData(){
+				var url = 'ssh/SysWarning/getWarningByCode'
+		        this.$post(url,{code:this.code})
+		        .then(res => {
+						this.value = res.result;
+						var str = res.result.image;
+						var strs = new Array();
+						if(str&&str.length !=0){
+							strs = str.split(",")
+						}
+						this.picture = strs;
+						console.log(this.picture)
+		        },(err) => {
+		        	console.log(err)
+		        })
 		      },
-		}
+		},
+		filters: {
+	        formatDate(time) {
+	            var date = new Date(time);
+	            return formatDate(date, 'yyyy-MM-dd hh:mm');
+	        }
+	   },
 	}
 </script>
 <style lang="scss" scoped>
@@ -107,14 +125,14 @@ import topTitle from '@/components/topTitle'
 			width: 100%;
 			height: 4.25rem;
 			margin-top:0.15rem;
-			padding-top: 0.1rem;
 			background:#FFF;
+			box-shadow: 0 0.05rem 0 rgba(220,220,220,0.6); 
+			padding-top: 0.23rem;
 			.remark{
 				width: 6.9rem;
 				min-height: 0.71rem;
 				border: 0.01rem solid #d2d2d2;
 				margin: 0 auto;
-				//margin-top: 0.23rem;
 				text-align:left;
 				padding-left: 0.15rem;
 				display: flex;
@@ -140,7 +158,10 @@ import topTitle from '@/components/topTitle'
 					div{
 						width: 1rem;
 						height: 0.8rem;
-						line-height: 0.8rem;
+						img{
+							width: 1rem;
+							height: 0.8rem;
+						}
 					}
 				}	
 			}
@@ -148,6 +169,7 @@ import topTitle from '@/components/topTitle'
 				width: 6.9rem;
 				height: 2.11rem;
 				margin:0 auto;
+				
 			}
 			.info_list>li{
 				list-style: none;
@@ -168,38 +190,30 @@ import topTitle from '@/components/topTitle'
 					padding-right: 0.15rem;
 				}	
 			}
-			.gray_box{
-				width: 100%;
-				height: 0.05rem;
-				background: #dbe1e6;
-			}
-			.black_box{
-				width: 100%;
-				height: 0.18rem;
-				background:#eff2f5;
-			}
-			.handel_box{
+			
+		}
+		.handel_box{
 				width: 100%;
 				height: 2.11rem;
 				margin:0 auto;
 				background:#FFF;
+				margin-top:0.5rem;
 				.info_list>li{
 					list-style: none;
 					height: 0.7rem;
-					
+					line-height: 0.7rem;
+					padding:0 0.5rem;
 					.list_1{
 						width: 25%;
 						float: left;
 						height: 0.7rem;
 						text-align: left;
-						padding-left: 0.15rem;
 					}
 					.list_2{
 						height: 0.7rem;
 						float: left;
 						width: 75%;
 						text-align:right;
-						padding-right: 0.15rem;
 					}
 				}
 			}
@@ -211,7 +225,6 @@ import topTitle from '@/components/topTitle'
 		        height: 0.8rem;
 		      }
 		    }
-		}
 	}
 	
 </style>
