@@ -49,13 +49,15 @@
     padding: 0 0.2rem;
     .right{
       float: right;
+      font-size: 0.36rem;
     }
     .right:active{
       color: red;
     }
     .center{
       position: absolute;
-      left: 42%;
+      left: 40%;
+      font-size: 0.36rem;
     }
     .left{
       float:left;
