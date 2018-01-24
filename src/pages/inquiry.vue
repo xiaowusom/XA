@@ -26,6 +26,7 @@ import topTitle from '@/components/topTitle'
     },
     methods:{
       handleSubmit(){
+        //console.log(this.workCode)
         this.$router.push({path:"/cancelReport", query: {workCode:this.workCode}})
       }
     }
