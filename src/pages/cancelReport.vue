@@ -100,7 +100,7 @@ import { formatDate } from '@/script/date.js'
 							strs = str.split(",")
 						}
 						this.picture = strs;
-						console.log(this.picture)
+					//console.log(this.picture)
 		        },(err) => {
 		        	console.log(err)
 		        })
