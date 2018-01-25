@@ -399,6 +399,7 @@ import { MessageBox } from 'mint-ui'
 					border:0.01rem solid #cfd5dd;
 					width: 5.11rem;
 					height: 0.62rem;
+					padding-left: 0.15rem;
 				}
 				.time{
 					display:inline-block;
