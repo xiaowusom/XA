@@ -54,11 +54,11 @@ import { MessageBox } from 'mint-ui'
   .input{
     width: 6.5rem;
     height: 1.34rem;
-    line-height: 1.34rem;
+    line-height:normal;
     margin: 1rem auto;
     background: #fff;
     border-radius: 0.2rem;
-    padding:0 0.2rem;
+    padding:0.15rem 0.2rem;
     input{
       width:100%;
       height:1rem;
