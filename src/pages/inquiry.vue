@@ -32,8 +32,7 @@ import { MessageBox } from 'mint-ui'
         	var url = "ssh/SysWarning/getWarningByCode";
 					this.$post(url,{code:this.workCode})
 		    	.then(res => {
-		    		//console.log(res)
-						if(res.errorCode == 200){
+						if(res.result != null){
 							this.$router.push({path:"/cancelReport", query: {workCode:this.workCode}})
 						}else{
 							MessageBox.alert("未查询到该订单号的信息", "提示");
