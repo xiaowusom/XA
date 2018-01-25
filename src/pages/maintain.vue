@@ -2,6 +2,7 @@
   <div class="bigDiv">
   <topTitle></topTitle>
     <div class="content">
+      <span class="red_star">*</span>
       <textarea class="text" placeholder="请在此处填写报事内容。"  v-model="contentValue"></textarea>
       <div class="imgDiv">
         <div class="imgBox">
@@ -72,9 +73,9 @@ import lrz from 'lrz'
     data(){
       return {
           file:null,
-          urlAddress1:'http://10.51.36.108:3002/xa/static/img.png',
-          urlAddress2:'http://10.51.36.108:3002/xa/static/img.png',
-          addImg:'http://10.51.36.108:3002/xa/static/camera.png',
+          urlAddress1:'http://202.105.96.131:3002/xa/static/img.png',
+          urlAddress2:'http://202.105.96.131:3002/xa/static/img.png',
+          addImg:'http://202.105.96.131:3002/xa/static/camera.png',
           imgs:[],
           imgFile: [],
           close:true,
@@ -104,6 +105,18 @@ import lrz from 'lrz'
         console.log('复制失败！请不要重试')
       },
       handleSubmit(){
+        if (!this.contentValue) {
+          alert('请输入报事内容');
+          return
+        }
+        // if (!this.userPhone) {
+        //   alert('请输入联系方式');
+        //   return
+        // }
+        if (!this.uaerAddress) {
+          alert('报事地址');
+          return
+        }
         var _this = this;
         //console.log(_this.imgs[0]);
         // var url =  JSON.stringify(_this.imgs[0]);
@@ -217,6 +230,7 @@ import lrz from 'lrz'
       margin-top: 0.15rem;
       padding: 0.18rem 0.28rem;
       box-shadow: 0 0.15rem 0 rgba(220,220,220,0.6);
+      position: relative;
     }
     .text{
       width: 100%;
@@ -295,6 +309,7 @@ import lrz from 'lrz'
         border-bottom: 0.02rem solid #D3D3D3;
         line-height:0.7rem;
         padding: 0 0.2rem;
+        position: relative;
         span{
           text-align: left;
           line-height:0.7rem;
@@ -311,12 +326,6 @@ import lrz from 'lrz'
         width:100%;
         padding: 0 0.2rem;
         position: relative;
-        .red_star{
-          position: absolute;
-          left: 0;
-          top: 0;
-          color: red;
-        }
         span{
           display: inline-block;
           margin-top:0.1rem;
@@ -419,5 +428,11 @@ import lrz from 'lrz'
 }
 .copy{
   color: blue;
+}
+.red_star{
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: red;
 }
 </style>
