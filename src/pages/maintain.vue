@@ -53,7 +53,11 @@
       <!-- <transition name="fade"> -->
         <div class="show_tip" v-if="showTip">
           <p>报事报修提交成功，您可以根据工单编号查询工单处理进度。</p>
-          <span>工单编号:</span><span class="odd_numbers" id="odd_numbers_id">{{oddNumbers}}</span><span class="copy" @click="copy">复制</span>
+          <span>工单编号:</span><span class="odd_numbers" id="odd_numbers_id" v-model="oddNumbers">{{oddNumbers}}</span><span class="copy"
+            v-clipboard:copy="oddNumbers"
+            v-clipboard:success="onCopy"
+            v-clipboard:error="onError"
+          >复制</span>
           <button @click="closeModal">确   定</button>
         </div>
       <!-- <transition> -->
@@ -68,9 +72,9 @@ import lrz from 'lrz'
     data(){
       return {
           file:null,
-          urlAddress1:'../../static/img.png',
-          urlAddress2:'../../static/img.png',
-          addImg:'../../static/camera.png',
+          urlAddress1:'http://10.51.36.108:3002/xa/static/img.png',
+          urlAddress2:'http://10.51.36.108:3002/xa/static/img.png',
+          addImg:'http://10.51.36.108:3002/xa/static/camera.png',
           imgs:[],
           imgFile: [],
           close:true,
@@ -93,6 +97,12 @@ import lrz from 'lrz'
       topTitle
     },
     methods:{
+      onCopy(e){
+        console.log(e.text)
+      },
+      onError(err){
+        console.log('复制失败！请不要重试')
+      },
       handleSubmit(){
         var _this = this;
         //console.log(_this.imgs[0]);
@@ -181,11 +191,11 @@ import lrz from 'lrz'
         // var file = document.getElementById('input').files
 
       },
-      copy(){
-        // alert(1)
-        // // var ID=document.getElementById("odd_numbers_id");
-        // // ID.select(); // 选择对象
-        // // document.execCommand("Copy");
+      copyNum(){
+        alert(1)
+        var ID=document.getElementById("odd_numbers_id");
+        ID.select(); // 选择对象
+        document.execCommand("Copy");
         // alert(1);
       },
       closeModal(){

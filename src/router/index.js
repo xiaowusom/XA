@@ -9,14 +9,8 @@ import cancelReport from '@/pages/cancelReport'
 Vue.use(Router)
 
 export default new Router({
-  routes: [{
-    path: '/maintain',
-    name: 'maintain',
-    component: maintain,
-    meta: {
-      title: '报事报修',
-    }
-  }, {
+  routes: [
+  {
     path: '/inquiry',
     name: 'inquiry',
     component: inquiry,
@@ -25,10 +19,10 @@ export default new Router({
     }
   }, {
     path: '/',
-    name: 'test1',
-    component: test1,
+    name: 'maintain',
+    component: maintain,
     meta: {
-      title: '测试列表1',
+      title: '报事报修',
     }
   }, {
     path: '/cancelReport',
