@@ -97,11 +97,13 @@
 		      <Button type="primary" shape="circle" :long="true">取消工单</Button>
 		    </div> 
 		</div>
+		
 	</div>
 </template>
 <script>
 import topTitle from '@/components/topTitle'
 import { formatDate } from '@/script/date.js'
+import { MessageBox } from 'mint-ui'
 	export default {
 		data() {
 			return {
@@ -109,7 +111,7 @@ import { formatDate } from '@/script/date.js'
 				picture:[],
 				photoNumber:'',
 				fadeIn:false,
-				time:3,
+				time:60,
 				phone:null,
 				isA:false,
 				code:'',
@@ -131,31 +133,52 @@ import { formatDate } from '@/script/date.js'
 		        this.$post(url,{code:code})
 		        .then(res => {
 						this.value = res.result;
-						//console.log(res.result.code)
 						this.phone = res.result.reportPhone;
 						this.code = res.result.code;
 						var str = res.result.image;
-						//console.log(JSON.stringify(str))
 						var strs = new Array();
 						if(str&&str.length !=0){
 							strs = str.split(",")
 						}
-						//console.log(strs)
 						this.picture = strs;
-						 //console.log(this.picture)
 		        },(err) => {
 		        	console.log(err)
 		        })
 		    },
 		    handleSubmit(){
-		    	this.fadeIn = true;
-		    	this.setTime();
-		    	this.getPone();
+		    	if(this.value.reportPhone!=''){
+		    		if(this.num == 1){
+			    		this.fadeIn = true;
+				    	this.setTime();
+				    	this.getPone();
+				    	this.num = 2;
+			    	}else{
+			    		this.fadeIn = true;
+			    	}
+		    	}else{
+		    		var url = "ssh/SysWarning/cancelWarning";
+					this.$post(url,{code:this.code})
+			    	.then(res => {
+			    		//console.log(res)
+						if(res.errorCode == 200){
+							MessageBox.alert("取消报事成功", "提示").then(action => {
+							  this.$router.push({path:"/inquiry"})
+							});
+						}else{
+							MessageBox.alert("取消报事失败", "提示");
+						}
+			    	},(err) =>{
+			    		console.log(err)
+			    	})
+		    	}
+		    	
+		    	
 		    },
 		    cancel(){
 		    	this.fadeIn = false;
 		    },
 		    showPicture(index){
+		    	
 		    	this.hidden = true;
 		    	//console.log(this.picture[index]);
 				this.newUrl = this.picture[index]
@@ -164,15 +187,24 @@ import { formatDate } from '@/script/date.js'
 				this.hidden = false;
 		    },
 		    sure(){	
-		    	//console.log(this.code+"--"+this.photoNumber)
-				var url = "ssh/SysWarning/cancelWarning";
-				this.$post(url,{code:JSON.stringify(this.code),verifyCode:JSON.stringify(this.photoNumber)})
+		    	if(this.photoNumber!=''){
+		    		this.cancelReport()
+		    	}else{
+		    		MessageBox.alert("请输入验证码", "提示");
+		    	}
+				
+		    },
+		    cancelReport(){
+		    	var url = "ssh/SysWarning/cancelWarning";
+				this.$post(url,{code:this.code,verifyCode:this.photoNumber})
 		    	.then(res => {
 		    		//console.log(res)
 					if(res.errorCode == 200){
-						alert("已取消报事")
+						MessageBox.alert("取消报事成功", "提示").then(action => {
+						  this.$router.push({path:"/inquiry"})
+						});
 					}else{
-						alert("取消报事失败，请重试！")
+						MessageBox.alert("取消报事失败", "提示");
 					}
 		    	},(err) =>{
 		    		console.log(err)
@@ -184,7 +216,9 @@ import { formatDate } from '@/script/date.js'
 		    	.then(res => {
 		    		//console.log(res)
 					if(res.errorCode == 200){
-						alert("短信已发送，请查收")
+						MessageBox.alert("短信已发送到您的手机，请注意查收", "提示");
+					}else{
+						MessageBox.alert("短信已发送失败，请联系工作人员解决", "提示");
 					}
 		    	},(err) =>{
 		    		console.log(err)
@@ -196,7 +230,7 @@ import { formatDate } from '@/script/date.js'
 					_this.time--;
 					if(_this.time === 0){
 			    		clearInterval(Time);
-			    		_this.time = 3;
+			    		_this.time = 60;
 			    		_this.isA = true;
 			    	}
 		    	},1000)
@@ -376,6 +410,7 @@ import { formatDate } from '@/script/date.js'
 					margin-top: 0.01rem;
 				}
 				.git_code{
+					background: transparent;
 					display:inline-block;
 					font-size: 0.30rem;
 					margin-top: 0.01rem;
@@ -417,6 +452,7 @@ import { formatDate } from '@/script/date.js'
 		
 	}
 	.blue_color{
+		background: transparent;
 		display:inline-block;
 		font-size: 0.30rem;
 		margin-top: 0.01rem;
