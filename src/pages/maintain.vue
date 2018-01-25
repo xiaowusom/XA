@@ -2,16 +2,17 @@
   <div class="bigDiv">
   <topTitle></topTitle>
     <div class="content">
+      <span class="textarea_star">*</span>
       <textarea class="text" placeholder="请在此处填写报事内容。"  v-model="contentValue"></textarea>
       <div class="imgDiv">
-        <div class="imgBox">
+        <div class="imgBox" v-if="urlAddress1">
 
             <!-- <div class="detele" @click="delete()">
                 <Icon type="ios-close"></Icon>
             </div> -->
             <img :src="urlAddress1">
         </div>
-        <div class="imgBox">
+        <div class="imgBox" v-if="urlAddress2">
             <!-- <div class="detele" @click="delete()">
                 <Icon type="ios-close"></Icon>
             </div> -->
@@ -69,14 +70,15 @@
 import topTitle from '@/components/topTitle'
 import clip from '@/script/clipboard'
 import lrz from 'lrz'
+import { MessageBox } from 'mint-ui'
 // lrz(this.files[0])
   export default {
     data(){
       return {
           file:null,
-          urlAddress1:'http://10.51.36.108:3002/xa/static/img.png',
-          urlAddress2:'http://10.51.36.108:3002/xa/static/img.png',
-          addImg:'http://10.51.36.108:3002/xa/static/camera.png',
+          urlAddress1:'',
+          urlAddress2:'',
+          addImg:'http://202.105.96.131:3002/xa/static/camera.png',
           imgs:[],
           imgFile: [],
           close:true,
@@ -90,11 +92,6 @@ import lrz from 'lrz'
       }
     },
     mounted(){
-      // this.contentValue = document.getElementById('contentValue');
-      // this.userName = document.getElementById('userName');
-      // this.userPhone = document.getElementById('userPhone');
-      // this.uaerAddress = document.getElementById('uaerAddress');
-      // this.getIos()
     },
     components: {
       topTitle
@@ -109,9 +106,14 @@ import lrz from 'lrz'
         clip(text, event)
       },
       onCopy(e){
+<<<<<<< HEAD
         console.log(e.text)
         this.hasCopy = true
         // this.selectAfterCopy()
+=======
+        // alert('成功')
+        // console.log(e.text)
+>>>>>>> 14fcaf3affc3895e5dc6bc33865ee4a945c3bd2a
       },
       onError(err){
         console.log('复制失败！请不要重试')
@@ -119,37 +121,71 @@ import lrz from 'lrz'
       },
       handleSubmit(){
         var _this = this;
-        //console.log(_this.imgs[0]);
-        // var url =  JSON.stringify(_this.imgs[0]);
-        var pic = new FormData();
-        for(let i=0; i<3; i++){
-          pic.append('files', _this.imgFile[i])
+        if (!this.contentValue) {
+          MessageBox.alert('请输入报事内容', '');
+          return
         }
-        console.log(pic);
-        // console.log(_this.imgFile[0]);
-        this.$post('/ssh/v1/appBase/filesUpload', pic, '', 'upImg').then(res => {
-          console.log(res.result.url)
-          // alert(res.result.url)
-              _this.$post('/ssh/SysWarning/addWarningByWeb',{
-                projectCode: '123',
-                image: res.result.url,
-                remarks:_this.contentValue,
-                reportPerson:_this.userName,
-                reportPhone:_this.userPhone,
-                address:_this.uaerAddress
+        if (!this.uaerAddress) {
+          MessageBox.alert('请输入报事地址', '');
+          return
+        }
+        if(_this.imgFile[0]){
+          var pic = new FormData();
+          for(let i=0; i<3; i++){
+            pic.append('files', _this.imgFile[i])
+          }
+          console.log(pic);
+          // console.log(_this.imgFile[0]);
+          this.$post('/ssh/v1/appBase/filesUpload', pic, '', 'upImg').then(res => {
+            if(res.errorCode !== 200){
+              MessageBox.alert('图片上传失败！');
+              return
+            }
+            // console.log(res.result.url)
+            _this.$post('/ssh/SysWarning/addWarningByWeb',{
+              projectCode: '123',
+              image: res.result.url,
+              remarks:_this.contentValue,
+              reportPerson:_this.userName,
+              reportPhone:_this.userPhone,
+              address:_this.uaerAddress
             }).then(res => {
-                  console.log(res)
-                  if (res.errorCode === 200) {
-                    _this.oddNumbers = res.result;
-                    _this.showTip = true;
-                  }else{
-                    _this.oddNumbers = res.errorCode;
-                    _this.showTip = true;
-                  }
-                }).catch(err=>{
-                  console.log(err)
-                })
+              console.log(res)
+              if (res.errorCode === 200) {
+                _this.oddNumbers = res.result;
+                _this.showTip = true;
+              }else{
+                MessageBox.alert('报事上传失败！');
+                return
+              }
+            }).catch(err=>{
+                console.log(err)
+                MessageBox.alert('报事上传失败！');
+                return
             })
+          })
+        } else {
+          _this.$post('/ssh/SysWarning/addWarningByWeb',{
+            projectCode: '123',
+            image: null,
+            remarks:_this.contentValue,
+            reportPerson:_this.userName,
+            reportPhone:_this.userPhone,
+            address:_this.uaerAddress
+          }).then(res => {
+            console.log(res)
+            if (res.errorCode === 200) {
+              _this.oddNumbers = res.result;
+              _this.showTip = true;
+            }else{
+              MessageBox.alert('报事上传失败！');
+              return
+            }
+          }).catch(err=>{
+              MessageBox.alert('报事上传失败！');
+              return
+          })
+        }
 
         //this.$router.push({ path: '/'});
       },
@@ -164,7 +200,6 @@ import lrz from 'lrz'
           var ua=navigator.userAgent.toLowerCase();
           if (ua.match(/iPhone\sOS/i) == "iphone os") {
           } else {
-
           }
       },
       //获取图片或者拍照
@@ -173,19 +208,11 @@ import lrz from 'lrz'
         var showFile = event.target.files[0];
         var file = this.$refs.uploadImg.files[0];
         lrz(file).then(function (rst) {
-            // 处理成功会执行
-            // console.log(rst);
-            // // 处理失败会执行
-            // console.log(rst.file);
-            // console.log(file);
             if(_this.imgFile.length < 3){
               _this.imgFile.push(rst.file);
             }
-            // console.log(_this.imgFile);
             var reader = new FileReader();
-            // console.log(reader)
             reader.readAsDataURL(showFile); // 读出 base64
-            // console.log(reader)
             reader.onloadend = function () {
                 _this.imgs.push(reader.result);
                 _this.urlAddress1 = _this.imgs[0];
@@ -196,21 +223,12 @@ import lrz from 'lrz'
                    _this.addImg = _this.imgs[2];
                    _this.close = false;
                 }
-              // console.log( _this.urlAddress)
             };
         })
         .catch(function (err) {
 
-          })
-        // var file = document.getElementById('input').files
+        })
 
-      },
-      copyNum(){
-        alert(1)
-        var ID=document.getElementById("odd_numbers_id");
-        ID.select(); // 选择对象
-        document.execCommand("Copy");
-        // alert(1);
       },
       closeModal(){
         window.location.reload();
@@ -231,9 +249,10 @@ import lrz from 'lrz'
       margin-top: 0.15rem;
       padding: 0.18rem 0.28rem;
       box-shadow: 0 0.15rem 0 rgba(220,220,220,0.6);
+      position: relative;
     }
     .text{
-      width: 100%;
+      width: 96%;
       height: 3.2rem;
       border: 0.02rem solid #D3D3D3;
       background-color: #fff;
@@ -246,6 +265,7 @@ import lrz from 'lrz'
       height: 1.05rem;
       width:100%;
       margin-bottom: 0.18rem;
+      text-align: left;
       .imgBox{
         vertical-align: top;
         position:relative;
@@ -310,6 +330,7 @@ import lrz from 'lrz'
         border-bottom: 0.02rem solid #D3D3D3;
         line-height:0.7rem;
         padding: 0 0.2rem;
+        position: relative;
         span{
           text-align: left;
           line-height:0.7rem;
@@ -326,12 +347,6 @@ import lrz from 'lrz'
         width:100%;
         padding: 0 0.2rem;
         position: relative;
-        .red_star{
-          position: absolute;
-          left: 0;
-          top: 0;
-          color: red;
-        }
         span{
           display: inline-block;
           margin-top:0.1rem;
@@ -344,7 +359,6 @@ import lrz from 'lrz'
           margin-top:0.1rem;
           width:4.8rem;
           text-align: right;
-          border-bottom: 0.02rem solid #D3D3D3;
         }
       }
     }
@@ -383,6 +397,7 @@ import lrz from 'lrz'
   background-color: #fff;
   border-radius: 0.1rem;
   box-shadow: 0 0 0.2rem #888;
+  z-index: 9999;
   p {
     text-align: left;
     text-indent: 0.6rem;
@@ -441,5 +456,21 @@ import lrz from 'lrz'
 }
 .copy{
   color: blue;
+  position: relative;
+  &:active{
+    color: #aaa;
+  }
+}
+.red_star{
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: red;
+}
+.textarea_star{
+  position: absolute;
+  left: 0.25rem;
+  top: 0;
+  color: red;
 }
 </style>

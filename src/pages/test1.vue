@@ -49,6 +49,7 @@
     width: 100%;
     background: #f55947;
     font-size: 0.16rem;
+
   }
 
 </style>

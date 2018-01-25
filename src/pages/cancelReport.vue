@@ -10,7 +10,7 @@
 						<span class="time">{{time}}s</span>
 						<button :class="isA ? 'blue_color' : 'git_code'" @click="getCode">获取验证码</button>
 					</div>
-					
+
 					<p class="info">验证通过后订单将会被取消</p>
 					<div class="btn">
 						<div class="cancel" @click="cancel">取消</div>
@@ -26,8 +26,8 @@
 			</div>
 			<topTitle></topTitle>
 			<div class="box">
-				
-				
+
+
 				<p class="remark">{{value.remarks}}</span>
 				</p>
 				<div class="picture_box">
@@ -35,8 +35,8 @@
 						<img :src="item" @click=showPicture(index)>
 					</div>
 					<!-- <div class="picture_list" v-for="item in picture" >
-						<img :src="item">
-					</div> -->
+						<img :src="item">问问
+					</div> 是多少-->
 				</div>
 				<ul class="info_list">
 					<li>
@@ -44,7 +44,7 @@
 							<span>联系人:</span>
 						</div>
 						<div class="list_2">
-							<span>{{value.peopleName}}</span>
+							<span>{{value.peopleName ==''?"无":value.peopleName}}</span>
 						</div>
 					</li>
 					<li>
@@ -52,8 +52,8 @@
 							<span>联系电话:</span>
 						</div>
 						<div class="list_2">
-							<span>{{value.reportPhone}}</span>
-						</div>				
+							<span>{{value.reportPhone==''?"无":value.reportPhone}}</span>
+						</div>
 					</li>
 					<li>
 						<div class="list_1">
@@ -63,7 +63,7 @@
 							<span>{{value.address}}</span>
 						</div>
 					</li>
-				</ul>	
+				</ul>
 			</div>
 			<div class="handel_box">
 				<ul class="info_list">
@@ -81,7 +81,7 @@
 						</div>
 						<div class="list_2">
 							<span>{{value.status == 1?"未受理":"已处理"}}</span>
-						</div>				
+						</div>
 					</li>
 					<li>
 						<div class="list_1">
@@ -95,13 +95,15 @@
 			</div>
 			<div class="next_btn" @click="handleSubmit()">
 		      <Button type="primary" shape="circle" :long="true">取消工单</Button>
-		    </div> 
+		    </div>
 		</div>
+		
 	</div>
 </template>
 <script>
 import topTitle from '@/components/topTitle'
 import { formatDate } from '@/script/date.js'
+import { MessageBox } from 'mint-ui'
 	export default {
 		data() {
 			return {
@@ -109,7 +111,7 @@ import { formatDate } from '@/script/date.js'
 				picture:[],
 				photoNumber:'',
 				fadeIn:false,
-				time:3,
+				time:60,
 				phone:null,
 				isA:false,
 				code:'',
@@ -131,31 +133,52 @@ import { formatDate } from '@/script/date.js'
 		        this.$post(url,{code:code})
 		        .then(res => {
 						this.value = res.result;
-						//console.log(res.result.code)
 						this.phone = res.result.reportPhone;
 						this.code = res.result.code;
 						var str = res.result.image;
-						//console.log(JSON.stringify(str))
 						var strs = new Array();
 						if(str&&str.length !=0){
 							strs = str.split(",")
 						}
-						//console.log(strs)
 						this.picture = strs;
-						 //console.log(this.picture)
 		        },(err) => {
 		        	console.log(err)
 		        })
 		    },
 		    handleSubmit(){
-		    	this.fadeIn = true;
-		    	this.setTime();
-		    	this.getPone();
+		    	if(this.value.reportPhone!=''){
+		    		if(this.num == 1){
+			    		this.fadeIn = true;
+				    	this.setTime();
+				    	this.getPone();
+				    	this.num = 2;
+			    	}else{
+			    		this.fadeIn = true;
+			    	}
+		    	}else{
+		    		var url = "ssh/SysWarning/cancelWarning";
+					this.$post(url,{code:this.code})
+			    	.then(res => {
+			    		//console.log(res)
+						if(res.errorCode == 200){
+							MessageBox.alert("取消报事成功", "提示").then(action => {
+							  this.$router.push({path:"/inquiry"})
+							});
+						}else{
+							MessageBox.alert("取消报事失败", "提示");
+						}
+			    	},(err) =>{
+			    		console.log(err)
+			    	})
+		    	}
+		    	
+		    	
 		    },
 		    cancel(){
 		    	this.fadeIn = false;
 		    },
 		    showPicture(index){
+		    	
 		    	this.hidden = true;
 		    	//console.log(this.picture[index]);
 				this.newUrl = this.picture[index]
@@ -164,15 +187,24 @@ import { formatDate } from '@/script/date.js'
 				this.hidden = false;
 		    },
 		    sure(){	
-		    	//console.log(this.code+"--"+this.photoNumber)
-				var url = "ssh/SysWarning/cancelWarning";
-				this.$post(url,{code:JSON.stringify(this.code),verifyCode:JSON.stringify(this.photoNumber)})
+		    	if(this.photoNumber!=''){
+		    		this.cancelReport()
+		    	}else{
+		    		MessageBox.alert("请输入验证码", "提示");
+		    	}
+				
+		    },
+		    cancelReport(){
+		    	var url = "ssh/SysWarning/cancelWarning";
+				this.$post(url,{code:this.code,verifyCode:this.photoNumber})
 		    	.then(res => {
 		    		//console.log(res)
 					if(res.errorCode == 200){
-						alert("已取消报事")
+						MessageBox.alert("取消报事成功", "提示").then(action => {
+						  this.$router.push({path:"/inquiry"})
+						});
 					}else{
-						alert("取消报事失败，请重试！")
+						MessageBox.alert("取消报事失败", "提示");
 					}
 		    	},(err) =>{
 		    		console.log(err)
@@ -184,7 +216,9 @@ import { formatDate } from '@/script/date.js'
 		    	.then(res => {
 		    		//console.log(res)
 					if(res.errorCode == 200){
-						alert("短信已发送，请查收")
+						MessageBox.alert("短信已发送到您的手机，请注意查收", "提示");
+					}else{
+						MessageBox.alert("短信已发送失败，请联系工作人员解决", "提示");
 					}
 		    	},(err) =>{
 		    		console.log(err)
@@ -196,11 +230,11 @@ import { formatDate } from '@/script/date.js'
 					_this.time--;
 					if(_this.time === 0){
 			    		clearInterval(Time);
-			    		_this.time = 3;
+			    		_this.time = 60;
 			    		_this.isA = true;
 			    	}
 		    	},1000)
-		    	
+
 		    },
 		    getCode(){
 				var _this = this;
@@ -216,7 +250,7 @@ import { formatDate } from '@/script/date.js'
 	            return formatDate(date, 'yyyy-MM-dd hh:mm');
 	        }
 	   },
-	   
+
 	}
 </script>
 <style lang="scss" scoped>
@@ -231,7 +265,7 @@ import { formatDate } from '@/script/date.js'
 			height: 4.25rem;
 			margin-top:0.15rem;
 			background:#FFF;
-			box-shadow: 0 0.05rem 0 rgba(220,220,220,0.6); 
+			box-shadow: 0 0.05rem 0 rgba(220,220,220,0.6);
 			padding-top: 0.23rem;
 			.remark{
 				width: 6.9rem;
@@ -265,13 +299,13 @@ import { formatDate } from '@/script/date.js'
 						width: 1rem;
 						height: 0.8rem;
 					}
-				}	
+				}
 			}
 			.info_list{
 				width: 6.9rem;
 				height: 2.11rem;
 				margin:0 auto;
-				
+
 			}
 			.info_list>li{
 				list-style: none;
@@ -290,9 +324,9 @@ import { formatDate } from '@/script/date.js'
 					width: 75%;
 					text-align:right;
 					padding-right: 0.15rem;
-				}	
+				}
 			}
-			
+
 		}
 		.handel_box{
 			width: 100%;
@@ -365,6 +399,7 @@ import { formatDate } from '@/script/date.js'
 					border:0.01rem solid #cfd5dd;
 					width: 5.11rem;
 					height: 0.62rem;
+					padding-left: 0.15rem;
 				}
 				.time{
 					display:inline-block;
@@ -376,6 +411,7 @@ import { formatDate } from '@/script/date.js'
 					margin-top: 0.01rem;
 				}
 				.git_code{
+					background: transparent;
 					display:inline-block;
 					font-size: 0.30rem;
 					margin-top: 0.01rem;
@@ -414,9 +450,10 @@ import { formatDate } from '@/script/date.js'
 				}
 			}
 		}
-		
+
 	}
 	.blue_color{
+		background: transparent;
 		display:inline-block;
 		font-size: 0.30rem;
 		margin-top: 0.01rem;
@@ -428,4 +465,4 @@ import { formatDate } from '@/script/date.js'
 		color: #5698ff;
 	}
 	</style>
-	
+
