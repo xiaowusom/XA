@@ -4,7 +4,7 @@ import mutations from './mutations';
 
 Vue.use(Vuex)
 
-const state = {
+const state = {	//此处配置公用的数据
 	project:[],
 	viewDirection: '',
 
