@@ -52,7 +52,8 @@
         <div class="modal" v-if="showTip"></div>
       <!-- <transition> -->
       <!-- <transition name="fade"> -->
-        <div class="show_tip" v-if="showTip">
+        <div class="show_tip" v-if="showTip"
+        >
           <p>报事报修提交成功，您可以根据工单编号查询工单处理进度。</p>
           <span>工单编号:</span><span class="odd_numbers" id="odd_numbers_id" v-model="oddNumbers">{{oddNumbers}}</span><span class="copy"
             v-clipboard:copy="oddNumbers"
@@ -68,6 +69,7 @@
 <script>
 import topTitle from '@/components/topTitle'
 import lrz from 'lrz'
+import { MessageBox } from 'mint-ui'
 // lrz(this.files[0])
   export default {
     data(){
@@ -99,56 +101,79 @@ import lrz from 'lrz'
     },
     methods:{
       onCopy(e){
-        console.log(e.text)
+        // alert('成功')
+        // console.log(e.text)
       },
       onError(err){
         console.log('复制失败！请不要重试')
       },
       handleSubmit(){
-        if (!this.contentValue) {
-          alert('请输入报事内容');
-          return
-        }
-        // if (!this.userPhone) {
-        //   alert('请输入联系方式');
-        //   return
-        // }
-        if (!this.uaerAddress) {
-          alert('报事地址');
-          return
-        }
         var _this = this;
-        //console.log(_this.imgs[0]);
-        // var url =  JSON.stringify(_this.imgs[0]);
-        var pic = new FormData();
-        for(let i=0; i<3; i++){
-          pic.append('files', _this.imgFile[i])
+        if (!this.contentValue) {
+          MessageBox.alert('请输入报事内容', '');
+          return
         }
-        console.log(pic);
-        // console.log(_this.imgFile[0]);
-        this.$post('/ssh/v1/appBase/filesUpload', pic, '', 'upImg').then(res => {
-          console.log(res.result.url)
-          // alert(res.result.url)
-              _this.$post('/ssh/SysWarning/addWarningByWeb',{
-                projectCode: '123',
-                image: res.result.url,
-                remarks:_this.contentValue,
-                reportPerson:_this.userName,
-                reportPhone:_this.userPhone,
-                address:_this.uaerAddress
+        if (!this.uaerAddress) {
+          MessageBox.alert('请输入报事地址', '');
+          return
+        }
+        if(_this.imgFile[0]){
+          var pic = new FormData();
+          for(let i=0; i<3; i++){
+            pic.append('files', _this.imgFile[i])
+          }
+          console.log(pic);
+          // console.log(_this.imgFile[0]);
+          this.$post('/ssh/v1/appBase/filesUpload', pic, '', 'upImg').then(res => {
+            if(res.errorCode !== 200){
+              MessageBox.alert('图片上传失败！');
+              return
+            }
+            // console.log(res.result.url)
+            _this.$post('/ssh/SysWarning/addWarningByWeb',{
+              projectCode: '123',
+              image: res.result.url,
+              remarks:_this.contentValue,
+              reportPerson:_this.userName,
+              reportPhone:_this.userPhone,
+              address:_this.uaerAddress
             }).then(res => {
-                  console.log(res)
-                  if (res.errorCode === 200) {
-                    _this.oddNumbers = res.result;
-                    _this.showTip = true;
-                  }else{
-                    _this.oddNumbers = res.errorCode;
-                    _this.showTip = true;
-                  }
-                }).catch(err=>{
-                  console.log(err)
-                })
+              console.log(res)
+              if (res.errorCode === 200) {
+                _this.oddNumbers = res.result;
+                _this.showTip = true;
+              }else{
+                MessageBox.alert('报事上传失败！');
+                return
+              }
+            }).catch(err=>{
+                console.log(err)
+                MessageBox.alert('报事上传失败！');
+                return
             })
+          })
+        } else {
+          _this.$post('/ssh/SysWarning/addWarningByWeb',{
+            projectCode: '123',
+            image: null,
+            remarks:_this.contentValue,
+            reportPerson:_this.userName,
+            reportPhone:_this.userPhone,
+            address:_this.uaerAddress
+          }).then(res => {
+            console.log(res)
+            if (res.errorCode === 200) {
+              _this.oddNumbers = res.result;
+              _this.showTip = true;
+            }else{
+              MessageBox.alert('报事上传失败！');
+              return
+            }
+          }).catch(err=>{
+              MessageBox.alert('报事上传失败！');
+              return
+          })
+        }
 
         //this.$router.push({ path: '/'});
       },
@@ -203,13 +228,6 @@ import lrz from 'lrz'
           })
         // var file = document.getElementById('input').files
 
-      },
-      copyNum(){
-        alert(1)
-        var ID=document.getElementById("odd_numbers_id");
-        ID.select(); // 选择对象
-        document.execCommand("Copy");
-        // alert(1);
       },
       closeModal(){
         window.location.reload();
@@ -338,7 +356,6 @@ import lrz from 'lrz'
           margin-top:0.1rem;
           width:4.8rem;
           text-align: right;
-          border-bottom: 0.02rem solid #D3D3D3;
         }
       }
     }
@@ -376,6 +393,7 @@ import lrz from 'lrz'
   background-color: #fff;
   border-radius: 0.1rem;
   box-shadow: 0 0 0.2rem #888;
+  z-index: 9999;
   p {
     text-align: left;
     text-indent: 0.6rem;
@@ -428,6 +446,10 @@ import lrz from 'lrz'
 }
 .copy{
   color: blue;
+  position: relative;
+  &:active{
+    color: #aaa;
+  }
 }
 .red_star{
   position: absolute;
