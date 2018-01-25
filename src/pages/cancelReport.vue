@@ -36,7 +36,7 @@
 					</div>
 					<!-- <div class="picture_list" v-for="item in picture" >
 						<img :src="item">
-					</div> -->
+					</div> 是多少-->
 				</div>
 				<ul class="info_list">
 					<li>
