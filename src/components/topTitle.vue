@@ -69,7 +69,7 @@
       background-size: 100% 100%;
     }
     .left:active{
-      background-image: url(../images/backs1.jpg);
+      background-image: url(../images/backs1.png);
     }
   }
 
