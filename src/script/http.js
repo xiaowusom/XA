@@ -25,7 +25,7 @@ axios.interceptors.request.use(
  			}
 	    config.headers = { //请求头的配置，请与你的后台商量需要的放回参数
 				// 'Content-Type':'application/json;charset=utf-8',		//不跨域时的请求头
-				'Content-Type':'application/x-www-form-urlencoded;charset=utf-8', 
+				'Content-Type':'application/x-www-form-urlencoded;charset=utf-8',
 				// 'Content-Type':	Content_Type,
 				// 'Stafftoken': token,
 				// 'Itemid': projectId  //项目iD
@@ -97,12 +97,14 @@ export function post(url, data = {}, newUrl, dataType) {
 	// }else{
 	// 	Content_Type = 'application/json;charset=utf-8';
 	// }
-	data = qs.stringify(data);
-	if(newUrl){
-		axios.defaults.baseURL = newUrl
-	}else{
-		axios.defaults.baseURL = baseUrl
-	}
+    if(dataType!='upImg'){
+      data = qs.stringify(data);
+    }
+  	if(newUrl){
+  		axios.defaults.baseURL = newUrl
+  	}else{
+  		axios.defaults.baseURL = baseUrl
+  	}
   	return new Promise((resolve, reject) => {
 
 		//console.log(axios.defaults.baseURL)
