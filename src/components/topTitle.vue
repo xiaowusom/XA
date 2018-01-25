@@ -10,9 +10,9 @@
   export default {
     data(){
       return {
-        Inquiry:true,
+        Inquiry:false,
         title:'',
-        maintain:true,
+        maintain:false,
       }
     },
     mounted(){
@@ -27,11 +27,11 @@
       },
       isInquiry(){
         this.title = this.$route.meta.title;
-        if(this.title=='报事查询'){
-           this.Inquiry=false;
+        if(this.title === '报事报修'){
+           this.Inquiry=true;
         }
-        if(this.title=='报事报修'){
-           this.maintain = false
+        if(this.title!=='报事报修'){
+           this.maintain = true
         }
       }
     }
