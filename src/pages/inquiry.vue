@@ -28,7 +28,7 @@ import { MessageBox } from 'mint-ui'
     methods:{
       handleSubmit(){
         if(this.workCode!=''){
-        	var url = "ssh/SysWarning/cancelWarning";
+        	var url = "ssh/SysWarning/getWarningByCode";
 					this.$post(url,{code:this.workCode})
 		    	.then(res => {
 		    		//console.log(res)
