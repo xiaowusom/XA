@@ -7,7 +7,7 @@
     <div class="next_btn" @click="handleSubmit()">
         <Button type="primary" shape="circle" :long="true">确定</Button>
     </div>
-  </div>  
+  </div>
 </template>
 
 <script>
@@ -46,7 +46,6 @@ import { MessageBox } from 'mint-ui'
       }
     }
   }
-
 </script>
 <style lang="scss" scoped>
 .bigDiv{
@@ -56,15 +55,15 @@ import { MessageBox } from 'mint-ui'
     width: 6.5rem;
     height: 1.34rem;
     line-height: 1.34rem;
-    margin: 1rem auto; 
+    margin: 1rem auto;
     background: #fff;
     border-radius: 0.2rem;
-    padding:0 0.2rem; 
+    padding:0 0.2rem;
     input{
       width:100%;
       height:1rem;
       text-align: center;
-    }    
+    }
   }
   .next_btn{
       width: 6.62rem;
