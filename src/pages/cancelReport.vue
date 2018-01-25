@@ -35,7 +35,7 @@
 						<img :src="item" @click=showPicture(index)>
 					</div>
 					<!-- <div class="picture_list" v-for="item in picture" >
-						<img :src="item">
+						<img :src="item">问问
 					</div> 是多少-->
 				</div>
 				<ul class="info_list">
