@@ -9,6 +9,9 @@ import '../theme/iview.css'
 import MintUI from 'mint-ui'
 import qs from 'qs'
 import 'mint-ui/lib/style.css'
+import VueClipboard from 'vue-clipboard2'   // 复制插件
+
+Vue.use(VueClipboard)
 
 import {
   post,

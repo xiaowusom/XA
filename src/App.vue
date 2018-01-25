@@ -26,7 +26,7 @@ export default {
 	    this.setTitle();
 	},
   mounted(){
-    
+
   },
 	methods: {
     setTitle(){

@@ -2,6 +2,7 @@
   <div class="bigDiv">
   <topTitle></topTitle>
     <div class="content">
+      <span class="red_star">*</span>
       <textarea class="text" placeholder="请在此处填写报事内容。"  v-model="contentValue"></textarea>
       <div class="imgDiv">
         <div class="imgBox">
@@ -53,7 +54,11 @@
       <!-- <transition name="fade"> -->
         <div class="show_tip" v-if="showTip">
           <p>报事报修提交成功，您可以根据工单编号查询工单处理进度。</p>
-          <span>工单编号:</span><span class="odd_numbers" id="odd_numbers_id">{{oddNumbers}}</span><span class="copy" @click="copy">复制</span>
+          <span>工单编号:</span><span class="odd_numbers" id="odd_numbers_id" v-model="oddNumbers">{{oddNumbers}}</span><span class="copy"
+            v-clipboard:copy="oddNumbers"
+            v-clipboard:success="onCopy"
+            v-clipboard:error="onError"
+          >复制</span>
           <button @click="closeModal">确   定</button>
         </div>
       <!-- <transition> -->
@@ -68,9 +73,9 @@ import lrz from 'lrz'
     data(){
       return {
           file:null,
-          urlAddress1:'../../static/img.png',
-          urlAddress2:'../../static/img.png',
-          addImg:'../../static/camera.png',
+          urlAddress1:'http://202.105.96.131:3002/xa/static/img.png',
+          urlAddress2:'http://202.105.96.131:3002/xa/static/img.png',
+          addImg:'http://202.105.96.131:3002/xa/static/camera.png',
           imgs:[],
           imgFile: [],
           close:true,
@@ -93,7 +98,25 @@ import lrz from 'lrz'
       topTitle
     },
     methods:{
+      onCopy(e){
+        console.log(e.text)
+      },
+      onError(err){
+        console.log('复制失败！请不要重试')
+      },
       handleSubmit(){
+        if (!this.contentValue) {
+          alert('请输入报事内容');
+          return
+        }
+        // if (!this.userPhone) {
+        //   alert('请输入联系方式');
+        //   return
+        // }
+        if (!this.uaerAddress) {
+          alert('报事地址');
+          return
+        }
         var _this = this;
         //console.log(_this.imgs[0]);
         // var url =  JSON.stringify(_this.imgs[0]);
@@ -181,11 +204,11 @@ import lrz from 'lrz'
         // var file = document.getElementById('input').files
 
       },
-      copy(){
-        // alert(1)
-        // // var ID=document.getElementById("odd_numbers_id");
-        // // ID.select(); // 选择对象
-        // // document.execCommand("Copy");
+      copyNum(){
+        alert(1)
+        var ID=document.getElementById("odd_numbers_id");
+        ID.select(); // 选择对象
+        document.execCommand("Copy");
         // alert(1);
       },
       closeModal(){
@@ -207,6 +230,7 @@ import lrz from 'lrz'
       margin-top: 0.15rem;
       padding: 0.18rem 0.28rem;
       box-shadow: 0 0.15rem 0 rgba(220,220,220,0.6);
+      position: relative;
     }
     .text{
       width: 100%;
@@ -285,6 +309,7 @@ import lrz from 'lrz'
         border-bottom: 0.02rem solid #D3D3D3;
         line-height:0.7rem;
         padding: 0 0.2rem;
+        position: relative;
         span{
           text-align: left;
           line-height:0.7rem;
@@ -301,12 +326,6 @@ import lrz from 'lrz'
         width:100%;
         padding: 0 0.2rem;
         position: relative;
-        .red_star{
-          position: absolute;
-          left: 0;
-          top: 0;
-          color: red;
-        }
         span{
           display: inline-block;
           margin-top:0.1rem;
@@ -409,5 +428,11 @@ import lrz from 'lrz'
 }
 .copy{
   color: blue;
+}
+.red_star{
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: red;
 }
 </style>
