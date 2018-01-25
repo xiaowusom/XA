@@ -2,17 +2,17 @@
   <div class="bigDiv">
   <topTitle></topTitle>
     <div class="content">
-      <span class="red_star">*</span>
+      <span class="textarea_star">*</span>
       <textarea class="text" placeholder="请在此处填写报事内容。"  v-model="contentValue"></textarea>
       <div class="imgDiv">
-        <div class="imgBox">
+        <div class="imgBox" v-if="urlAddress1">
 
             <!-- <div class="detele" @click="delete()">
                 <Icon type="ios-close"></Icon>
             </div> -->
             <img :src="urlAddress1">
         </div>
-        <div class="imgBox">
+        <div class="imgBox" v-if="urlAddress2">
             <!-- <div class="detele" @click="delete()">
                 <Icon type="ios-close"></Icon>
             </div> -->
@@ -75,8 +75,8 @@ import { MessageBox } from 'mint-ui'
     data(){
       return {
           file:null,
-          urlAddress1:'http://202.105.96.131:3002/xa/static/img.png',
-          urlAddress2:'http://202.105.96.131:3002/xa/static/img.png',
+          urlAddress1:'',
+          urlAddress2:'',
           addImg:'http://202.105.96.131:3002/xa/static/camera.png',
           imgs:[],
           imgFile: [],
@@ -90,11 +90,6 @@ import { MessageBox } from 'mint-ui'
       }
     },
     mounted(){
-      // this.contentValue = document.getElementById('contentValue');
-      // this.userName = document.getElementById('userName');
-      // this.userPhone = document.getElementById('userPhone');
-      // this.uaerAddress = document.getElementById('uaerAddress');
-      // this.getIos()
     },
     components: {
       topTitle
@@ -188,7 +183,6 @@ import { MessageBox } from 'mint-ui'
           var ua=navigator.userAgent.toLowerCase();
           if (ua.match(/iPhone\sOS/i) == "iphone os") {
           } else {
-
           }
       },
       //获取图片或者拍照
@@ -197,19 +191,11 @@ import { MessageBox } from 'mint-ui'
         var showFile = event.target.files[0];
         var file = this.$refs.uploadImg.files[0];
         lrz(file).then(function (rst) {
-            // 处理成功会执行
-            // console.log(rst);
-            // // 处理失败会执行
-            // console.log(rst.file);
-            // console.log(file);
             if(_this.imgFile.length < 3){
               _this.imgFile.push(rst.file);
             }
-            // console.log(_this.imgFile);
             var reader = new FileReader();
-            // console.log(reader)
             reader.readAsDataURL(showFile); // 读出 base64
-            // console.log(reader)
             reader.onloadend = function () {
                 _this.imgs.push(reader.result);
                 _this.urlAddress1 = _this.imgs[0];
@@ -220,13 +206,11 @@ import { MessageBox } from 'mint-ui'
                    _this.addImg = _this.imgs[2];
                    _this.close = false;
                 }
-              // console.log( _this.urlAddress)
             };
         })
         .catch(function (err) {
 
-          })
-        // var file = document.getElementById('input').files
+        })
 
       },
       closeModal(){
@@ -251,7 +235,7 @@ import { MessageBox } from 'mint-ui'
       position: relative;
     }
     .text{
-      width: 100%;
+      width: 96%;
       height: 3.2rem;
       border: 0.02rem solid #D3D3D3;
       background-color: #fff;
@@ -264,6 +248,7 @@ import { MessageBox } from 'mint-ui'
       height: 1.05rem;
       width:100%;
       margin-bottom: 0.18rem;
+      text-align: left;
       .imgBox{
         vertical-align: top;
         position:relative;
@@ -454,6 +439,12 @@ import { MessageBox } from 'mint-ui'
 .red_star{
   position: absolute;
   left: 0;
+  top: 0;
+  color: red;
+}
+.textarea_star{
+  position: absolute;
+  left: 0.25rem;
   top: 0;
   color: red;
 }
