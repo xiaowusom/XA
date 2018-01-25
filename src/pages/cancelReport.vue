@@ -35,7 +35,7 @@
 						<img :src="item" @click=showPicture(index)>
 					</div>
 					<!-- <div class="picture_list" v-for="item in picture" >
-						<img :src="item">
+						<img :src="item">问问
 					</div> 是多少-->
 				</div>
 				<ul class="info_list">
@@ -399,6 +399,7 @@ import { MessageBox } from 'mint-ui'
 					border:0.01rem solid #cfd5dd;
 					width: 5.11rem;
 					height: 0.62rem;
+					padding-left: 0.15rem;
 				}
 				.time{
 					display:inline-block;
