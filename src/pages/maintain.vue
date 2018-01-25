@@ -48,16 +48,17 @@
         <p class="textPrompt">点击提交后，工单编号将以短信的形式下发至您的手机，且今后工单进度的更新也会以短信的形式下发至您的手机，请注意查收。</p>
       </div>
       <!-- <transition name="fade"> -->
-        <div class="modal" v-if="showTip"></div>
+        <div class="modal" v-if="showTip" @click.stop.prevent=""></div>
       <!-- <transition> -->
       <!-- <transition name="fade"> -->
-        <div class="show_tip" v-if="showTip">
+        <div class="show_tip" v-if="showTip" @click.stop.prevent="">
           <p>报事报修提交成功，您可以根据工单编号查询工单处理进度。</p>
-          <span>工单编号:</span><span class="odd_numbers" id="odd_numbers_id" v-model="oddNumbers">{{oddNumbers}}</span><span class="copy"
-            v-clipboard:copy="oddNumbers"
-            v-clipboard:success="onCopy"
-            v-clipboard:error="onError"
-          >复制</span>
+          <div>
+            <span>工单编号:</span>
+            <span :class="'odd_numbers ' + (hasCopy ? 'colorbg' : '')" id="odd_numbers_id" v-model="oddNumbers">{{oddNumbers}}</span>
+            <!-- <input type="text" v-model="oddNumbers" class="odd_numbers" id="odd_numbers_id"> -->
+            <span class="copy" v-clipboard:copy="oddNumbers" v-clipboard:success="onCopy" v-clipboard:error="onError"  @click='handleCopy(oddNumbers,$event)'>复制</span>
+          </div>
           <button @click="closeModal">确   定</button>
         </div>
       <!-- <transition> -->
@@ -66,6 +67,7 @@
 
 <script>
 import topTitle from '@/components/topTitle'
+import clip from '@/script/clipboard'
 import lrz from 'lrz'
 // lrz(this.files[0])
   export default {
@@ -82,8 +84,9 @@ import lrz from 'lrz'
           userName:null,
           userPhone:null,
           uaerAddress:null,
-          oddNumbers: 111111,
+          oddNumbers: 123201811111,
           showTip: false,
+          hasCopy: false
       }
     },
     mounted(){
@@ -97,11 +100,22 @@ import lrz from 'lrz'
       topTitle
     },
     methods:{
+      // selectAfterCopy() {
+      //   var ele = document.querySelector('#odd_numbers_id')
+      //   ele.focus()
+      //   ele.select()
+      // },
+      handleCopy(text, event) {
+        clip(text, event)
+      },
       onCopy(e){
         console.log(e.text)
+        this.hasCopy = true
+        // this.selectAfterCopy()
       },
       onError(err){
         console.log('复制失败！请不要重试')
+        // this.selectAfterCopy()
       },
       handleSubmit(){
         var _this = this;
@@ -263,6 +277,7 @@ import lrz from 'lrz'
           top: 0;
           left: 0;
           z-index: 100;
+          // z-index: 0;
           height: 1.05rem;
           width:2rem;
           font-size:0;
@@ -361,6 +376,7 @@ import lrz from 'lrz'
   width: 5.8rem;
   padding: 0.4rem 0.4rem 0.1rem 0.4rem;
   position: absolute;
+  z-index: 102;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
@@ -380,6 +396,11 @@ import lrz from 'lrz'
     margin-right: 0.3rem;
     font-size: 0.32rem;
     font-weight: bold;
+    width: 2.5rem;
+    outline: none;
+  }
+  .odd_numbers.colorbg {
+    background-color: #b9d6fb
   }
   button {
     display: block;
@@ -402,6 +423,7 @@ import lrz from 'lrz'
   top: -10rem;
   height: 30rem;
   width: 30rem;
+  z-index: 101;
   background-color: rgba(0, 0, 0, 0.1);
 }
 .fade-enter-active,.fade-leave-active{
