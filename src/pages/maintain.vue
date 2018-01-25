@@ -104,16 +104,12 @@ import { MessageBox } from 'mint-ui'
       // },
       handleCopy(text, event) {
         clip(text, event)
+        console.log('hahhah')
       },
       onCopy(e){
-<<<<<<< HEAD
         console.log(e.text)
         this.hasCopy = true
         // this.selectAfterCopy()
-=======
-        // alert('成功')
-        // console.log(e.text)
->>>>>>> 14fcaf3affc3895e5dc6bc33865ee4a945c3bd2a
       },
       onError(err){
         console.log('复制失败！请不要重试')
