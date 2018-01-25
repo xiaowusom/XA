@@ -10,7 +10,7 @@
 						<span class="time">{{time}}s</span>
 						<button :class="isA ? 'blue_color' : 'git_code'" @click="getCode">获取验证码</button>
 					</div>
-					
+
 					<p class="info">验证通过后订单将会被取消</p>
 					<div class="btn">
 						<div class="cancel" @click="cancel">取消</div>
@@ -26,8 +26,8 @@
 			</div>
 			<topTitle></topTitle>
 			<div class="box">
-				
-				
+
+
 				<p class="remark">{{value.remarks}}</span>
 				</p>
 				<div class="picture_box">
@@ -53,7 +53,7 @@
 						</div>
 						<div class="list_2">
 							<span>{{value.reportPhone}}</span>
-						</div>				
+						</div>
 					</li>
 					<li>
 						<div class="list_1">
@@ -63,7 +63,7 @@
 							<span>{{value.address}}</span>
 						</div>
 					</li>
-				</ul>	
+				</ul>
 			</div>
 			<div class="handel_box">
 				<ul class="info_list">
@@ -81,7 +81,7 @@
 						</div>
 						<div class="list_2">
 							<span>{{value.status == 1?"未受理":"已处理"}}</span>
-						</div>				
+						</div>
 					</li>
 					<li>
 						<div class="list_1">
@@ -95,7 +95,7 @@
 			</div>
 			<div class="next_btn" @click="handleSubmit()">
 		      <Button type="primary" shape="circle" :long="true">取消工单</Button>
-		    </div> 
+		    </div>
 		</div>
 		
 	</div>
@@ -234,7 +234,7 @@ import { MessageBox } from 'mint-ui'
 			    		_this.isA = true;
 			    	}
 		    	},1000)
-		    	
+
 		    },
 		    getCode(){
 				var _this = this;
@@ -250,7 +250,7 @@ import { MessageBox } from 'mint-ui'
 	            return formatDate(date, 'yyyy-MM-dd hh:mm');
 	        }
 	   },
-	   
+
 	}
 </script>
 <style lang="scss" scoped>
@@ -265,7 +265,7 @@ import { MessageBox } from 'mint-ui'
 			height: 4.25rem;
 			margin-top:0.15rem;
 			background:#FFF;
-			box-shadow: 0 0.05rem 0 rgba(220,220,220,0.6); 
+			box-shadow: 0 0.05rem 0 rgba(220,220,220,0.6);
 			padding-top: 0.23rem;
 			.remark{
 				width: 6.9rem;
@@ -299,13 +299,13 @@ import { MessageBox } from 'mint-ui'
 						width: 1rem;
 						height: 0.8rem;
 					}
-				}	
+				}
 			}
 			.info_list{
 				width: 6.9rem;
 				height: 2.11rem;
 				margin:0 auto;
-				
+
 			}
 			.info_list>li{
 				list-style: none;
@@ -324,9 +324,9 @@ import { MessageBox } from 'mint-ui'
 					width: 75%;
 					text-align:right;
 					padding-right: 0.15rem;
-				}	
+				}
 			}
-			
+
 		}
 		.handel_box{
 			width: 100%;
@@ -449,7 +449,7 @@ import { MessageBox } from 'mint-ui'
 				}
 			}
 		}
-		
+
 	}
 	.blue_color{
 		background: transparent;
@@ -464,4 +464,4 @@ import { MessageBox } from 'mint-ui'
 		color: #5698ff;
 	}
 	</style>
-	
+
