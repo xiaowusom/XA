@@ -44,7 +44,7 @@
 							<span>联系人:</span>
 						</div>
 						<div class="list_2">
-							<span>{{value.peopleName}}</span>
+							<span>{{value.peopleName ==''?"无":value.peopleName}}</span>
 						</div>
 					</li>
 					<li>
@@ -52,7 +52,7 @@
 							<span>联系电话:</span>
 						</div>
 						<div class="list_2">
-							<span>{{value.reportPhone}}</span>
+							<span>{{value.reportPhone==''?"无":value.reportPhone}}</span>
 						</div>
 					</li>
 					<li>

@@ -4,6 +4,7 @@
     <div class="input">
       <input type="text" placeholder="请输入工单编号" v-model="workCode">
     </div>
+   <!-- df-->
     <div class="next_btn" @click="handleSubmit()">
         <Button type="primary" shape="circle" :long="true">确定</Button>
     </div>
@@ -28,11 +29,10 @@ import { MessageBox } from 'mint-ui'
     methods:{
       handleSubmit(){
         if(this.workCode!=''){
-        	var url = "ssh/SysWarning/cancelWarning";
+        	var url = "ssh/SysWarning/getWarningByCode";
 					this.$post(url,{code:this.workCode})
 		    	.then(res => {
-		    		//console.log(res)
-						if(res.errorCode == 200){
+						if(res.result != null){
 							this.$router.push({path:"/cancelReport", query: {workCode:this.workCode}})
 						}else{
 							MessageBox.alert("未查询到该订单号的信息", "提示");
