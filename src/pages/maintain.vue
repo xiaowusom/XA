@@ -95,8 +95,11 @@ import { MessageBox } from 'mint-ui'
       topTitle
     },
     methods:{
+      _click(){
+        alert('其实点击了')
+      },
       onCopy(e){
-        // alert('成功')
+        alert('成功')
         // console.log(e.text)
       },
       onError(err){
