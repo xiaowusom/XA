@@ -59,7 +59,7 @@
 						<div class="list_1">
 							<span>报事地址:</span>
 						</div>
-						<div class="list_2">
+						<div class="list_2 large_content">
 							<span>{{value.address}}</span>
 						</div>
 					</li>
@@ -94,10 +94,10 @@
 				</ul>
 			</div>
 			<div class="next_btn" @click="handleSubmit()">
-		      <Button type="primary" shape="circle" :long="true">取消工单</Button>
+		      <button>取消工单</button>
 		    </div>
 		</div>
-		
+
 	</div>
 </template>
 <script>
@@ -127,6 +127,12 @@ import { MessageBox } from 'mint-ui'
 	      topTitle
 	    },
 		methods: {
+      replaceJump() {
+        var currentURL = window.location.href
+        var end = currentURL.indexOf(this.$route.path)
+        var replaceURL = currentURL.slice(0, end) + '/'
+        window.location.replace(replaceURL)
+      },
 			getData(){
 				var code = this.$route.query.workCode
 				var url = 'ssh/SysWarning/getWarningByCode'
@@ -162,7 +168,7 @@ import { MessageBox } from 'mint-ui'
 			    		//console.log(res)
 						if(res.errorCode == 200){
 							MessageBox.alert("取消报事成功", "提示").then(action => {
-							  this.$router.push({path:"/inquiry"})
+                this.replaceJump()
 							});
 						}else{
 							MessageBox.alert("取消报事失败", "提示");
@@ -171,14 +177,12 @@ import { MessageBox } from 'mint-ui'
 			    		console.log(err)
 			    	})
 		    	}
-		    	
-		    	
 		    },
 		    cancel(){
 		    	this.fadeIn = false;
 		    },
 		    showPicture(index){
-		    	
+
 		    	this.hidden = true;
 		    	//console.log(this.picture[index]);
 				this.newUrl = this.picture[index]
@@ -186,13 +190,13 @@ import { MessageBox } from 'mint-ui'
 		    hidePicture(){
 				this.hidden = false;
 		    },
-		    sure(){	
+		    sure(){
 		    	if(this.photoNumber!=''){
 		    		this.cancelReport()
 		    	}else{
 		    		MessageBox.alert("请输入验证码", "提示");
 		    	}
-				
+
 		    },
 		    cancelReport(){
 		    	var url = "ssh/SysWarning/cancelWarning";
@@ -201,7 +205,7 @@ import { MessageBox } from 'mint-ui'
 		    		//console.log(res)
 					if(res.errorCode == 200){
 						MessageBox.alert("取消报事成功", "提示").then(action => {
-						  this.$router.push({path:"/inquiry"})
+                this.replaceJump()
 						});
 					}else{
 						MessageBox.alert("取消报事失败", "提示");
@@ -254,6 +258,7 @@ import { MessageBox } from 'mint-ui'
 	}
 </script>
 <style lang="scss" scoped>
+@import 'src/style/mixin';
 	.content{
 		width: 100%;
 		height: 100%;
@@ -262,7 +267,7 @@ import { MessageBox } from 'mint-ui'
 		box-sizing: border-box;
 		.box{
 			width: 100%;
-			height: 4.25rem;
+			// height: 4.25rem;
 			margin-top:0.15rem;
 			background:#FFF;
 			box-shadow: 0 0.05rem 0 rgba(220,220,220,0.6);
@@ -324,6 +329,7 @@ import { MessageBox } from 'mint-ui'
 					width: 75%;
 					text-align:right;
 					padding-right: 0.15rem;
+          overflow: auto;
 				}
 			}
 
@@ -357,9 +363,10 @@ import { MessageBox } from 'mint-ui'
 	      width: 6.62rem;
 	      margin: 0 auto;
 	      margin-top: 1rem;
-	      Button{
-	        height: 0.8rem;
-	      }
+	      button{
+          height: 0.8rem;
+          @include comfirmBtn;
+        }
 	    }
 	}
 	.fade{
@@ -464,5 +471,9 @@ import { MessageBox } from 'mint-ui'
 		border:none;
 		color: #5698ff;
 	}
+  .large_content {
+    height: 0.8rem;
+    line-height: 0.4rem;
+  }
 	</style>
 

@@ -22,7 +22,7 @@ export default new Router({
     name: 'maintain',
     component: maintain,
     meta: {
-      title: '报事报修',
+      title: '报事投诉',
     }
   }, {
     path: '/cancelReport',

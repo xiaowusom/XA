@@ -3,7 +3,7 @@
   <topTitle></topTitle>
     <div class="content">
       <span class="textarea_star">*</span>
-      <textarea class="text" placeholder="请在此处填写报事内容。"  v-model="contentValue"></textarea>
+      <textarea class="text" id="content_value" placeholder="请在此处填写报事内容。"  v-model="contentValue" maxlength="240" autofocus></textarea>
       <div class="imgDiv">
         <div class="imgBox" v-if="urlAddress1">
 
@@ -29,37 +29,37 @@
       <div class="userMessage">
         <div class="user">
           <span>联系人：</span>
-          <input type="text" placeholder="请输入姓名" id="userName" v-model="userName">
+          <input type="text" placeholder="请输入姓名" id="userName" maxlength="10" v-model="userName">
         </div>
         <div class="user">
           <span>联系方式：</span>
-          <input type="text" placeholder="请输入手机号" id="userPhone" v-model="userPhone">
+          <input id="phone_value" type="text" placeholder="请输入手机号" v-model="userPhone">
         </div>
         <div class="address">
           <span class="red_star">*</span><span>报事地址：</span>
-          <textarea name="报事地址" class="textValue" placeholder="请输入报事地段" v-model="uaerAddress" id="uaerAddress"></textarea>
+          <textarea name="报事地址" class="textValue" id="address_value" placeholder="请输入报事地段" maxlength="100" v-model="uaerAddress"></textarea>
         </div>
       </div>
     </div>
     <div class="next_btn" @click="handleSubmit()">
-      <Button type="primary" shape="circle" :long="true">提交</Button>
+      <button>提交</button>
     </div>
       <div class="prompt">
         <p>温馨提示：</p>
         <p class="textPrompt">点击提交后，工单编号将以短信的形式下发至您的手机，且今后工单进度的更新也会以短信的形式下发至您的手机，请注意查收。</p>
       </div>
       <!-- <transition name="fade"> -->
-        <div class="modal" v-if="showTip"></div>
+        <div class="modal" v-if="showTip" @click.stop.prevent=""></div>
       <!-- <transition> -->
       <!-- <transition name="fade"> -->
-        <div class="show_tip" v-if="showTip"
-        >
+        <div class="show_tip" v-if="showTip" @click.stop.prevent="">
           <p>报事报修提交成功，您可以根据工单编号查询工单处理进度。</p>
-          <span>工单编号:</span><span class="odd_numbers" id="odd_numbers_id" v-model="oddNumbers">{{oddNumbers}}</span><span class="copy"
-            v-clipboard:copy="oddNumbers"
-            v-clipboard:success="onCopy"
-            v-clipboard:error="onError"
-          >复制</span>
+          <div>
+            <span>工单编号:</span>
+            <span :class="'odd_numbers ' + (hasCopy ? 'colorbg' : '')" id="odd_numbers_id" v-model="oddNumbers">{{oddNumbers}}</span>
+            <!-- <input type="text" v-model="oddNumbers" class="odd_numbers" id="odd_numbers_id"> -->
+            <span class="copy" v-clipboard:copy="oddNumbers" v-clipboard:success="onCopy" v-clipboard:error="onError"  @click='handleCopy(oddNumbers,$event)'>复制</span>
+          </div>
           <button @click="closeModal">确   定</button>
         </div>
       <!-- <transition> -->
@@ -68,9 +68,10 @@
 
 <script>
 import topTitle from '@/components/topTitle'
-import lrz from 'lrz'
+import clip from '@/script/clipboard'
+import lrz from 'lrz' //图片压缩
 import { MessageBox } from 'mint-ui'
-// lrz(this.files[0])
+import {mapState} from 'vuex'
   export default {
     data(){
       return {
@@ -85,34 +86,57 @@ import { MessageBox } from 'mint-ui'
           userName:null,
           userPhone:null,
           uaerAddress:null,
-          oddNumbers: 111111,
+          oddNumbers: 123201811111,
           showTip: false,
+          hasCopy: false
       }
     },
+    computed:{
+      ...mapState(['imgURL'])
+    },
     mounted(){
+      this.addImg = this.imgURL + 'camera.png' ;
     },
     components: {
       topTitle
     },
     methods:{
-      _click(){
-        alert('其实点击了')
+      // selectAfterCopy() {
+      //   var ele = document.querySelector('#odd_numbers_id')
+      //   ele.focus()
+      //   ele.select()
+      // },
+      handleCopy(text, event) {
+        clip(text, event)
       },
       onCopy(e){
-        alert('成功')
-        // console.log(e.text)
+        console.log(e.text)
+        this.hasCopy = true
+        // this.selectAfterCopy()
       },
       onError(err){
         console.log('复制失败！请不要重试')
+        // this.selectAfterCopy()
       },
       handleSubmit(){
         var _this = this;
         if (!this.contentValue) {
           MessageBox.alert('请输入报事内容', '');
+          document.getElementById('content_value').focus();
           return
+        }
+        if (this.userPhone) {
+            if(!(/^1[3|4|5|8][0-9]\d{4,8}$/.test(this.userPhone))){
+            MessageBox.alert('请输入正确的手机号码', '');
+            console.log(document.getElementById('phone_value'))
+            document.getElementById('phone_value').focus()
+            return
+            // document.mobileform.mobile.focus();
+           }
         }
         if (!this.uaerAddress) {
           MessageBox.alert('请输入报事地址', '');
+          document.getElementById('address_value').focus();
           return
         }
         if(_this.imgFile[0]){
@@ -120,14 +144,11 @@ import { MessageBox } from 'mint-ui'
           for(let i=0; i<3; i++){
             pic.append('files', _this.imgFile[i])
           }
-          console.log(pic);
-          // console.log(_this.imgFile[0]);
           this.$post('/ssh/v1/appBase/filesUpload', pic, '', 'upImg').then(res => {
             if(res.errorCode !== 200){
               MessageBox.alert('图片上传失败！');
               return
             }
-            // console.log(res.result.url)
             _this.$post('/ssh/SysWarning/addWarningByWeb',{
               projectCode: '123',
               image: res.result.url,
@@ -136,7 +157,6 @@ import { MessageBox } from 'mint-ui'
               reportPhone:_this.userPhone,
               address:_this.uaerAddress
             }).then(res => {
-              console.log(res)
               if (res.errorCode === 200) {
                 _this.oddNumbers = res.result;
                 _this.showTip = true;
@@ -159,7 +179,6 @@ import { MessageBox } from 'mint-ui'
             reportPhone:_this.userPhone,
             address:_this.uaerAddress
           }).then(res => {
-            console.log(res)
             if (res.errorCode === 200) {
               _this.oddNumbers = res.result;
               _this.showTip = true;
@@ -219,11 +238,21 @@ import { MessageBox } from 'mint-ui'
       closeModal(){
         window.location.reload();
       },
+    },
+    directives: {
+      focus: {
+        update: function (el, {value}) {
+          if (value) {
+            el.focus()
+          }
+        }
+      }
     }
   }
 
 </script>
 <style lang="scss" scoped>
+@import 'src/style/mixin';
   .bigDiv{
     height: 100%;
     width: 100%;
@@ -259,9 +288,6 @@ import { MessageBox } from 'mint-ui'
         display:inline-block;
         height: 1.05rem;
         width:2rem;
-        //border: 0.02rem dashed #D3D3D3;
-        // background-image: url(../images/img.png);
-        // background-size: 100% 100%;
         img{
           display:inline-block;
           height: 1.05rem;
@@ -283,6 +309,7 @@ import { MessageBox } from 'mint-ui'
           top: 0;
           left: 0;
           z-index: 100;
+          // z-index: 0;
           height: 1.05rem;
           width:2rem;
           font-size:0;
@@ -351,8 +378,9 @@ import { MessageBox } from 'mint-ui'
       width: 6.62rem;
       margin: 0 auto;
       margin-top: 1rem;
-      Button{
+      button{
         height: 0.8rem;
+        @include comfirmBtn;
       }
     }
     .prompt{
@@ -375,6 +403,7 @@ import { MessageBox } from 'mint-ui'
   width: 5.8rem;
   padding: 0.4rem 0.4rem 0.1rem 0.4rem;
   position: absolute;
+  z-index: 102;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
@@ -392,9 +421,14 @@ import { MessageBox } from 'mint-ui'
   }
   .odd_numbers{
     margin-left: 0.1rem;
-    margin-right: 0.3rem;
+    margin-right: 0.1rem;
     font-size: 0.32rem;
     font-weight: bold;
+    width: 2.5rem;
+    outline: none;
+  }
+  .odd_numbers.colorbg {
+    background-color: #b9d6fb
   }
   button {
     display: block;
@@ -417,6 +451,7 @@ import { MessageBox } from 'mint-ui'
   top: -10rem;
   height: 30rem;
   width: 30rem;
+  z-index: 101;
   background-color: rgba(0, 0, 0, 0.1);
 }
 .fade-enter-active,.fade-leave-active{

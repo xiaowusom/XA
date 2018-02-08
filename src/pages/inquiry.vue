@@ -2,11 +2,11 @@
   <div class="bigDiv">
    <topTitle></topTitle>
     <div class="input">
-      <input type="text" placeholder="请输入工单编号" v-model="workCode">
+      <input type="text" placeholder="请输入工单编号" v-model="workCode" autofocus>
     </div>
    <!-- df-->
     <div class="next_btn" @click="handleSubmit()">
-        <Button type="primary" shape="circle" :long="true">确定</Button>
+        <button>确定</button>
     </div>
   </div>
 </template>
@@ -48,6 +48,7 @@ import { MessageBox } from 'mint-ui'
   }
 </script>
 <style lang="scss" scoped>
+@import 'src/style/mixin';
 .bigDiv{
   height:100%;
   width:100%;
@@ -68,8 +69,9 @@ import { MessageBox } from 'mint-ui'
   .next_btn{
       width: 6.62rem;
       margin: 0 auto;
-      Button{
+      button{
         height: 0.8rem;
+        @include comfirmBtn;
       }
     }
 }
