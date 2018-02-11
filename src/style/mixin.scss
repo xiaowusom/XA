@@ -1,0 +1,10 @@
+@mixin comfirmBtn {
+    width: 100%;
+    border-radius: 0.2rem;
+    background-color: #39f;
+    color: #fff;
+    font-size: 0.32rem;
+    &:active {
+        background-color: #2685e4;
+    }
+}

@@ -1,0 +1,37 @@
+<!DOCTYPE html><html><head><meta charset=utf-8><meta content="initial-scale=1,minimum-scale=1,maximum-scale=2,user-scalable=no,width=device-width" name=viewport><style type=text/css>/* 简单进行默认样式重置 */
+        * {
+            margin: 0;
+            padding: 0
+        }
+        li {
+            list-style: none;
+        }
+        a {
+            text-decoration: none;
+        }
+        img {
+            vertical-align: middle;
+        }
+        body {
+            background-color: #ffffff
+        }
+        html {
+            background-color: #ffffff
+        }
+        /**/</style><title></title><link href=./static/css/app.d104c9c0187d1ffd85de9c43486c3dfb.css rel=stylesheet></head><body ontouchstart=""><div id=app></div><script type=text/javascript src=./static/js/manifest.11b90e82b1dd3a13ac2a.js></script><script type=text/javascript src=./static/js/vendor.0600564b8de3db26b8f2.js></script><script type=text/javascript src=./static/js/app.1d0497e592ce6a8463c5.js></script></body><script type=text/javascript charset=utf-8 async defer=defer>// 基准值为750px 设计稿
+    (function (doc, win) {
+          var docEl = doc.documentElement,
+              resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',
+              recalc = function () {
+                  var clientWidth = docEl.clientWidth;
+                  if (!clientWidth) return;
+                  if(clientWidth>=750){
+                      docEl.style.fontSize = '100px';
+                  }else{
+                      docEl.style.fontSize = 100 * (clientWidth /750) + 'px';
+                  }
+              };
+          if (!doc.addEventListener) return;
+          win.addEventListener(resizeEvt, recalc, false);
+          doc.addEventListener('DOMContentLoaded', recalc, false);
+      })(document, window);</script></html>
