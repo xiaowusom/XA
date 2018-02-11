@@ -125,7 +125,6 @@ import lrz from 'lrz'
           pic.append('files', _this.imgFile[i])
         }
         console.log(pic);
-        // console.log(_this.imgFile[0]);
         this.$post('/ssh/v1/appBase/filesUpload', pic, '', 'upImg').then(res => {
           console.log(res.result.url)
           // alert(res.result.url)
