@@ -5,7 +5,7 @@ import qs from 'qs'
 
 
 // axios 配置 根据实际接口配置IP地址
-var baseUrl = 'http://202.105.104.105:8006';
+var baseUrl = 'https://report.xh-mind.com:8443/';
 
 axios.defaults.timeout = 5000;
 axios.defaults.baseURL = baseUrl; //这是调用数据接口

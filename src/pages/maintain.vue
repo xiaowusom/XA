@@ -1,42 +1,42 @@
 <template>
   <div class="bigDiv">
-  <topTitle></topTitle>
+    <topTitle></topTitle>
+    <div class="case_type">
+      <span class="type_start">*</span>
+      <span class="title">报事类型：</span>
+      <input id="safe" name="caseType" type="radio" value=1 v-model="caseType"><label for="safe">园区安全</label>
+      <input id="fixed" name="caseType" type="radio" value=2 v-model="caseType"><label for="fixed">设备维修</label>
+      <input id="suggest" name="caseType" type="radio" value=3 v-model="caseType"><label for="suggest">服务建议</label>
+    </div>
     <div class="content">
+      <span class="title">报事内容:</span>
       <span class="textarea_star">*</span>
-      <textarea class="text" id="content_value" placeholder="请在此处填写报事内容。"  v-model="contentValue" maxlength="240" autofocus></textarea>
+      <textarea class="text" id="content_value" placeholder="请在此处填写报事内容。"  v-model="contentValue" maxlength="240"></textarea>
       <div class="imgDiv">
         <div class="imgBox" v-if="urlAddress1">
-
-            <!-- <div class="detele" @click="delete()">
-                <Icon type="ios-close"></Icon>
-            </div> -->
             <img :src="urlAddress1">
         </div>
         <div class="imgBox" v-if="urlAddress2">
-            <!-- <div class="detele" @click="delete()">
-                <Icon type="ios-close"></Icon>
-            </div> -->
             <img :src="urlAddress2">
         </div>
         <div class="photograph">
-        <!-- <div class="detele" @click="delete()">
-                <Icon type="ios-close"></Icon>
-            </div> -->
           <img :src="addImg">
           <input id="input" ref="uploadImg" type="file" accept="image/*" @change="getImg($event)" v-if="close">
         </div>
       </div>
       <div class="userMessage">
         <div class="user">
+          <span class="red_star" v-if="caseType==2">*</span>
           <span>联系人：</span>
           <input type="text" placeholder="请输入姓名" id="userName" maxlength="10" v-model="userName">
         </div>
         <div class="user">
+          <span class="red_star" v-if="caseType==2">*</span>
           <span>联系方式：</span>
           <input id="phone_value" type="text" placeholder="请输入手机号" v-model="userPhone">
         </div>
         <div class="address">
-          <span class="red_star">*</span><span>报事地址：</span>
+          <span class="red_star" v-if="caseType==2||caseType==1">*</span><span>报事地址：</span>
           <textarea name="报事地址" class="textValue" id="address_value" placeholder="请输入报事地段" maxlength="100" v-model="uaerAddress"></textarea>
         </div>
       </div>
@@ -88,7 +88,8 @@ import {mapState} from 'vuex'
           uaerAddress:null,
           oddNumbers: 123201811111,
           showTip: false,
-          hasCopy: false
+          hasCopy: false,
+          caseType: 3,
       }
     },
     computed:{
@@ -125,6 +126,16 @@ import {mapState} from 'vuex'
           document.getElementById('content_value').focus();
           return
         }
+        if (!this.userName && (this.caseType == 2)) {
+          MessageBox.alert('请输入联系人姓名', '');
+          document.getElementById('userName').focus();
+          return
+        }
+        if (!this.userPhone && (this.caseType == 2)) {
+          MessageBox.alert('请输入联系方式', '');
+          document.getElementById('userName').focus();
+          return
+        }
         if (this.userPhone) {
             if(!(/^1[3|4|5|8][0-9]\d{4,8}$/.test(this.userPhone))){
             MessageBox.alert('请输入正确的手机号码', '');
@@ -134,7 +145,7 @@ import {mapState} from 'vuex'
             // document.mobileform.mobile.focus();
            }
         }
-        if (!this.uaerAddress) {
+        if (!this.uaerAddress && (this.caseType == 1 || this.caseType == 2)) {
           MessageBox.alert('请输入报事地址', '');
           document.getElementById('address_value').focus();
           return
@@ -150,7 +161,7 @@ import {mapState} from 'vuex'
               return
             }
             _this.$post('/ssh/SysWarning/addWarningByWeb',{
-              projectCode: '123',
+              projectCode: 'XACS001',
               image: res.result.url,
               remarks:_this.contentValue,
               reportPerson:_this.userName,
@@ -172,12 +183,13 @@ import {mapState} from 'vuex'
           })
         } else {
           _this.$post('/ssh/SysWarning/addWarningByWeb',{
-            projectCode: '123',
+            projectCode: 'XACS001',
             image: null,
             remarks:_this.contentValue,
             reportPerson:_this.userName,
             reportPhone:_this.userPhone,
-            address:_this.uaerAddress
+            address:_this.uaerAddress,
+            reportType: _this.caseType
           }).then(res => {
             if (res.errorCode === 200) {
               _this.oddNumbers = res.result;
@@ -191,7 +203,6 @@ import {mapState} from 'vuex'
               return
           })
         }
-
         //this.$router.push({ path: '/'});
       },
       //删除图片
@@ -239,13 +250,9 @@ import {mapState} from 'vuex'
         window.location.reload();
       },
     },
-    directives: {
-      focus: {
-        update: function (el, {value}) {
-          if (value) {
-            el.focus()
-          }
-        }
+    watch:{
+      caseType:function() {
+        // alert(this.caseType)
       }
     }
   }
@@ -257,12 +264,43 @@ import {mapState} from 'vuex'
     height: 100%;
     width: 100%;
     background-color: #EFf2f5;
+    .case_type {
+      position: relative;
+      height: 0.5rem;
+      margin-top: 0.15rem;
+      background-color: #fff;
+      text-align: left;
+      padding-left: 0.25rem;
+      padding-top: 0.1rem;
+      .type_start {
+        position: absolute;
+        left: 0.25rem;
+        top: 0.1rem;
+        color: red;
+      }
+      label {
+        margin-left: 0.05rem;
+        margin-right: 0.2rem;
+        display: inline-block;
+        float: left;
+      }
+      input {
+        line-height: 0.4rem;
+        margin-top: 0.05rem;
+        display: inline-block;
+        float: left;
+      }
+    }
+    .title {
+      float: left;
+      margin-left: 0.2rem;
+      margin-bottom: 0.1rem;
+    }
     .content{
       //height:8.1rem;
       width: 100%;
       background-color: #FFF;
-      margin-top: 0.15rem;
-      padding: 0.18rem 0.28rem;
+      padding: 0.15rem 0.28rem;
       box-shadow: 0 0.15rem 0 rgba(220,220,220,0.6);
       position: relative;
     }
@@ -483,7 +521,7 @@ import {mapState} from 'vuex'
 .textarea_star{
   position: absolute;
   left: 0.25rem;
-  top: 0;
+  top: 0.15rem;
   color: red;
 }
 </style>
