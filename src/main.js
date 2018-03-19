@@ -10,7 +10,9 @@ import MintUI from 'mint-ui'
 import qs from 'qs'
 import 'mint-ui/lib/style.css'
 import VueClipboard from 'vue-clipboard2'   // 复制插件
+import VueResource from 'vue-resource'
 
+Vue.use(VueResource)
 Vue.use(VueClipboard)
 
 import {

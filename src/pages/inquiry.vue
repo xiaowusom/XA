@@ -39,6 +39,7 @@ import { MessageBox } from 'mint-ui'
 						}
 		    	},(err) =>{
 		    		console.log(err)
+            alert("err"+err)
 		    	})
         }else{
         		MessageBox.alert("请输入订单号", "提示");

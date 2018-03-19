@@ -42,11 +42,11 @@
       </div>
     </div>
     <div class="next_btn" @click="handleSubmit()">
-      <button>提交</button>
+      <button :disabled="submiting" :class="{submiting: submiting}">提交</button>
     </div>
       <div class="prompt">
         <p>温馨提示：</p>
-        <p class="textPrompt">点击提交后，工单编号将以短信的形式下发至您的手机，且今后工单进度的更新也会以短信的形式下发至您的手机，请注意查收。</p>
+        <p class="textPrompt">填写联系方式即可通过手机接收工单生成、工单进度短信信息。</p>
       </div>
       <!-- <transition name="fade"> -->
         <div class="modal" v-if="showTip" @click.stop.prevent=""></div>
@@ -90,6 +90,7 @@ import {mapState} from 'vuex'
           showTip: false,
           hasCopy: false,
           caseType: 3,
+          submiting: false, // 正在提交状态
       }
     },
     computed:{
@@ -150,36 +151,45 @@ import {mapState} from 'vuex'
           document.getElementById('address_value').focus();
           return
         }
+        this.submiting = true;
         if(_this.imgFile[0]){
           var pic = new FormData();
           for(let i=0; i<3; i++){
             pic.append('files', _this.imgFile[i])
           }
           this.$post('/ssh/v1/appBase/filesUpload', pic, '', 'upImg').then(res => {
-            if(res.errorCode !== 200){
-              MessageBox.alert('图片上传失败！');
+              if(res.errorCode !== 200){
+                MessageBox.alert('图片上传失败！');
               return
-            }
+              }
             _this.$post('/ssh/SysWarning/addWarningByWeb',{
               projectCode: 'XACS001',
               image: res.result.url,
               remarks:_this.contentValue,
               reportPerson:_this.userName,
               reportPhone:_this.userPhone,
-              address:_this.uaerAddress
+              address:_this.uaerAddress,
+              reportType: _this.caseType
             }).then(res => {
               if (res.errorCode === 200) {
                 _this.oddNumbers = res.result;
                 _this.showTip = true;
+                this.submiting = false;
               }else{
                 MessageBox.alert('报事上传失败！');
+                this.submiting = false;
                 return
               }
             }).catch(err=>{
                 console.log(err)
-                MessageBox.alert('报事上传失败！');
+                MessageBox.alert('请求失败！');
+                this.submiting = false;
                 return
             })
+          }).catch(err=>{
+                MessageBox.alert('请求失败！');
+                this.submiting = false;
+                return
           })
         } else {
           _this.$post('/ssh/SysWarning/addWarningByWeb',{
@@ -194,12 +204,15 @@ import {mapState} from 'vuex'
             if (res.errorCode === 200) {
               _this.oddNumbers = res.result;
               _this.showTip = true;
+              this.submiting = false;
             }else{
               MessageBox.alert('报事上传失败！');
+              this.submiting = false;
               return
             }
           }).catch(err=>{
-              MessageBox.alert('报事上传失败！');
+              MessageBox.alert('请求失败！');
+              this.submiting = false;
               return
           })
         }
@@ -523,5 +536,8 @@ import {mapState} from 'vuex'
   left: 0.25rem;
   top: 0.15rem;
   color: red;
+}
+.submiting {
+  background-color: #bacfe4!important;
 }
 </style>

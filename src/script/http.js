@@ -15,20 +15,8 @@ var Content_Type = 'application/json;charset=utf-8';
 axios.interceptors.request.use(
   config => {
  		if(axios.defaults.baseURL == baseUrl){
- 			var token = getCookie('privarytoken'); //获取Cookie
- 			if(token&&token.length!=0){
- 				token = token.slice(6);
- 			}
- 			var projectId = JSON.parse(getStore('projectInfo'));
- 			if(projectId && projectId.length!=0){
- 				projectId = projectId.code;
- 			}
-	    config.headers = { //请求头的配置，请与你的后台商量需要的放回参数
-				// 'Content-Type':'application/json;charset=utf-8',		//不跨域时的请求头
+	    config.headers = {
 				'Content-Type':'application/x-www-form-urlencoded;charset=utf-8',
-				// 'Content-Type':	Content_Type,
-				// 'Stafftoken': token,
-				// 'Itemid': projectId  //项目iD
 	    };
 			// alert(projectId)
  }
