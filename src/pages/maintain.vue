@@ -20,7 +20,7 @@
             <img :src="urlAddress2">
         </div>
         <div class="photograph">
-          <img :src="addImg">
+          <div class="camera_div"></div>
           <input id="input" ref="uploadImg" type="file" accept="image/*" @change="getImg($event)" v-if="close">
         </div>
       </div>
@@ -138,7 +138,7 @@ import {mapState} from 'vuex'
           return
         }
         if (this.userPhone) {
-            if(!(/^1[3|4|5|8][0-9]\d{4,8}$/.test(this.userPhone))){
+            if(!(/^1[3|4|5|6|8][0-9]\d{4,8}$/.test(this.userPhone))){
             MessageBox.alert('请输入正确的手机号码', '');
             console.log(document.getElementById('phone_value'))
             document.getElementById('phone_value').focus()
@@ -350,10 +350,18 @@ import {mapState} from 'vuex'
         display:inline-block;
         height: 1.05rem;
         width:2rem;
-        img{
+        .camera_div{
           display:inline-block;
           height: 1.05rem;
           width:2rem;
+          background: url('http://202.105.96.131:3002/xa/static/camera.png');
+          background-size: 100% 100%;
+          &:active {
+            // background: url('http://202.105.96.131:3002/xa/static/camera_active.png');
+            // background-size: 100% 100%;
+            height: 2.05rem;
+            width:2.5rem;
+          }
         }
         input{
           position:absolute;

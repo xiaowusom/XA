@@ -1,10 +1,16 @@
+/* 变量定义
+*/
+// 主题色
+$mainColor: #d43c33;
+$lightColor: #f5a5a0;
+
 @mixin comfirmBtn {
     width: 100%;
     border-radius: 0.2rem;
-    background-color: #39f;
+    background-color: $mainColor;
     color: #fff;
     font-size: 0.32rem;
     &:active {
-        background-color: #2685e4;
+        background-color: $lightColor;
     }
 }
