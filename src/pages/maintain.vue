@@ -4,9 +4,11 @@
     <div class="case_type">
       <span class="type_start">*</span>
       <span class="title">报事类型：</span>
-      <input id="safe" name="caseType" type="radio" value=1 v-model="caseType"><label for="safe">园区安全</label>
-      <input id="fixed" name="caseType" type="radio" value=2 v-model="caseType"><label for="fixed">设备维修</label>
-      <input id="suggest" name="caseType" type="radio" value=3 v-model="caseType"><label for="suggest">服务建议</label>
+      <RadioGroup v-model="caseType" >
+        <Radio label="1"  value=1>园区安全</Radio>
+        <Radio label="2"  value=2>设备维修</Radio>
+        <Radio label="3"  value=3>服务建议</Radio>
+      </RadioGroup>
     </div>
     <div class="content">
       <span class="title">报事内容:</span>
@@ -91,6 +93,7 @@ import {mapState} from 'vuex'
           hasCopy: false,
           caseType: 3,
           submiting: false, // 正在提交状态
+          animal:'爪哇犀牛',
       }
     },
     computed:{

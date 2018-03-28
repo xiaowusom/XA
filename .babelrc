@@ -15,6 +15,10 @@
       "style": true
     }
   ]]],
+  "plugins": [["import", {
+    "libraryName": "iview",
+    "libraryDirectory": "src/components"
+  }]],
   "env": {
     "test": {
       "presets": ["env", "stage-2"],

@@ -8998,7 +8998,7 @@ fieldset[disabled] .ivu-btn-info>a:only-child:after {
 }
 
 .ivu-radio-wrapper {
-    font-size: 12px;
+    font-size: 14px;
     vertical-align: middle;
     display: inline-block;
     position: relative;
@@ -9050,7 +9050,7 @@ fieldset[disabled] .ivu-btn-info>a:only-child:after {
     border-top: 0;
     border-left: 0;
     content: ' ';
-    background-color: #39f;
+    background-color: #f02d6b;
     opacity: 0;
     transition: all .2s ease-in-out;
     -ms-transform: scale(0);
@@ -9069,7 +9069,7 @@ fieldset[disabled] .ivu-btn-info>a:only-child:after {
 }
 
 .ivu-radio-checked .ivu-radio-inner {
-    border-color: #39f
+    border-color: #f02d6b
 }
 
 .ivu-radio-checked .ivu-radio-inner:after {
@@ -9080,7 +9080,7 @@ fieldset[disabled] .ivu-btn-info>a:only-child:after {
 }
 
 .ivu-radio-checked:hover .ivu-radio-inner {
-    border-color: #39f
+    border-color: #f02d6b
 }
 
 .ivu-radio-disabled {

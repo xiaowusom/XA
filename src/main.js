@@ -11,9 +11,14 @@ import qs from 'qs'
 import 'mint-ui/lib/style.css'
 import VueClipboard from 'vue-clipboard2'   // 复制插件
 import VueResource from 'vue-resource'
+import { RadioGroup, Radio } from 'iview';
+import '../theme/iview.css';
 
+Vue.component('Radio', Radio);
+Vue.component('RadioGroup', RadioGroup);
 Vue.use(VueResource)
 Vue.use(VueClipboard)
+
 
 import {
   post,
